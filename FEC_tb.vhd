@@ -19,8 +19,12 @@ architecture FEC_tb_rtl of FEC_tb is
 
         FEC_input_data            : in    std_logic; 
         FEC_input_valid           : in    std_logic; 
+        FEC_input_ready           : IN  std_logic; 
+
         FEC_output_data           : out   std_logic;
-        FEC_output_valid          : out   std_logic 
+        FEC_output_valid          : out   std_logic;
+        FEC_output_ready          : IN  std_logic
+
     );
     end component;
 
@@ -34,6 +38,7 @@ architecture FEC_tb_rtl of FEC_tb is
     signal   CLK_100MHz                           : std_logic := '1'; 
     signal   reset                                : std_logic; 
     signal   FEC_input_valid                      : std_logic; 
+    signal   FEC_input_ready                      : std_logic; 
     signal   test_in_vector                       : std_logic_vector(95 downto 0) := FEC_VECTOR_INPUT;
     signal   test_out_vector                      : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
     signal   FEC_Expected_Output                  : std_logic_vector(191 downto 0) := FEC_VECTOR_OUTPUT;
@@ -41,11 +46,12 @@ architecture FEC_tb_rtl of FEC_tb is
     signal   test_pass_fec_encoder                : boolean := true;
     signal   FEC_output_data                      : std_logic;
     signal   FEC_output_valid                     : std_logic;
+    signal   FEC_output_ready                     : std_logic;
     signal   flag                                 : std_logic := '0';
 begin 
 
     --instant 
-    uut: FEC port map (CLK_50MHz => CLK_50MHz, CLK_100MHz => CLK_100MHz, reset => reset, FEC_input_data => FEC_input_data, FEC_input_valid => FEC_input_valid, FEC_output_data => FEC_output_data, FEC_output_valid => FEC_output_valid);
+    uut: FEC port map (CLK_50MHz => CLK_50MHz, CLK_100MHz => CLK_100MHz, reset => reset, FEC_input_data => FEC_input_data, FEC_input_valid => FEC_input_valid, FEC_input_ready => FEC_input_ready, FEC_output_data => FEC_output_data, FEC_output_valid => FEC_output_valid, FEC_output_ready => FEC_output_ready);
 
     --clk process 
     CLK_50MHz <= not CLK_50MHz after CLK_50MHz_test; 

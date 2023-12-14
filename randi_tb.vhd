@@ -8,17 +8,22 @@ end randi_tb;
 -- Rnadi RTL
 architecture randi_tb_rtl of randi_tb is
     COMPONENT randi
-        PORT
+    PORT
         (
-            clk_50MHz           : IN  std_logic;
+            clk_50MHz            : IN  std_logic;
 
-            reset               : IN  std_logic;
-            load                : IN  std_logic;
+            reset                : IN  std_logic;
+            load                 : IN  std_logic;
             
-            randi_input_data    : IN  std_logic;
-            randi_input_valid   : IN  std_logic;
+            randi_input_data     : IN  std_logic;
+            randi_input_valid    : IN  std_logic;
+            randi_input_ready    : IN  std_logic;
+
+
             randi_output_data   : OUT std_logic;
-            randi_output_valid  : OUT std_logic
+            randi_output_valid  : OUT std_logic;
+            randi_output_ready  : OUT std_logic
+
         );
     end component;
 
@@ -29,6 +34,8 @@ architecture randi_tb_rtl of randi_tb is
     signal load                                      : std_logic;  
     signal randi_input_data                          : std_logic; 
     signal randi_output_data                         : std_logic; 
+    signal randi_input_ready                          : std_logic; 
+    signal randi_output_ready                         : std_logic; 
     signal randi_output_valid                        : std_logic;
     signal input_vector                             : std_logic_vector(95 downto 0) := RANDI_VECTOR_INPUT;
     signal RANDI_Output_Expected                        : std_logic_vector(95 downto 0) := RANDI_VECTOR_OUTPUT;
@@ -40,13 +47,15 @@ architecture randi_tb_rtl of randi_tb is
 begin 
     --instant 
     uut: randi port map (
-        clk_50MHz             => clk, 
-        reset                 => reset, 
-        load                  => load,   
-        randi_input_data      => randi_input_data, 
-        randi_input_valid     => randi_input_valid,  
-        randi_output_valid    => randi_output_valid,          
-        randi_output_data     => randi_output_data
+        clk_50MHz              => clk, 
+        reset                  => reset, 
+        load                   => load,   
+        randi_input_data       => randi_input_data, 
+        randi_input_valid      => randi_input_valid,  
+        randi_input_ready      => randi_input_ready,  
+        randi_output_valid     => randi_output_valid,          
+        randi_output_data      => randi_output_data,
+        randi_output_ready     => randi_output_ready
         );
 
     --clock process 

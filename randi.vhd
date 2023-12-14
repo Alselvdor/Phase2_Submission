@@ -5,15 +5,20 @@ use IEEE.NUMERIC_STD.ALL;
 entity randi is 
             PORT
             (
-                clk_50MHz           : IN  std_logic;
+                clk_50MHz            : IN  std_logic;
 
-                reset               : IN  std_logic;
-                load                : IN  std_logic;
+                reset                : IN  std_logic;
+                load                 : IN  std_logic;
                 
-                randi_input_data    : IN  std_logic;
-                randi_input_valid   : IN  std_logic;
+                randi_input_data     : IN  std_logic;
+                randi_input_valid    : IN  std_logic;
+                randi_input_ready    : IN  std_logic;
+
+
                 randi_output_data   : OUT std_logic;
-                randi_output_valid  : OUT std_logic
+                randi_output_valid  : OUT std_logic;
+                randi_output_ready  : OUT std_logic
+
             );
 end randi;
 

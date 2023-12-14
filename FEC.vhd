@@ -14,8 +14,12 @@ entity FEC is
 
         FEC_input_data            : in    std_logic; 
         FEC_input_valid           : in    std_logic; 
+        FEC_input_ready           : IN  std_logic; 
+
         FEC_output_data           : out   std_logic;
-        FEC_output_valid          : out   std_logic 
+        FEC_output_valid          : out   std_logic;
+        FEC_output_ready          : IN  std_logic
+
     );
 end FEC;
 

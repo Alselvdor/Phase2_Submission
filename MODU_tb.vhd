@@ -14,17 +14,21 @@ architecture MODU_tb_rtl of MODU_tb is
 
             MODU_input_data       :IN  std_logic; 
             MODU_input_valid      :IN  std_logic;
+            MODU_input_ready      :IN  std_logic;
 
 
             MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
             MODU_output_I         :OUT std_logic_vector(15 DOWNTO 0);
-            MODU_output_valid     :OUT std_logic
+            MODU_output_valid     :OUT std_logic;
+            MODU_output_ready     :OUT std_logic
     );
     end component;
 
     signal clk_100MHz             : std_logic := '0';
     signal reset                  : std_logic;
     signal MODU_input_valid       : std_logic;
+    signal MODU_input_ready       : std_logic;
+
     signal test_in_vector         : std_logic_vector(191 downto 0) := MODU_VECTOR_INPUT;
     signal test_out_vector_Q      : std_logic_vector(1535 downto 0) := (others => '0');
     signal test_out_vector_I      : std_logic_vector(1535 downto 0) := (others => '0');
@@ -34,6 +38,8 @@ architecture MODU_tb_rtl of MODU_tb is
     signal MODU_output_Q          : std_logic_vector(15 downto 0);
     signal MODU_output_I          : std_logic_vector(15 downto 0);
     signal MODU_output_valid      : std_logic;
+    signal MODU_output_ready      : std_logic;
+
     signal flag                   : std_logic := '0';
 
     signal test_pass_MODU_encoder_I                : boolean := true;
@@ -46,10 +52,13 @@ begin
         reset              => reset,
         MODU_input_data    => MODU_input_data,
         MODU_input_valid   => MODU_input_valid,
+        MODU_input_ready   => MODU_input_ready,
+
 
         MODU_output_Q      => MODU_output_Q,
         MODU_output_I      => MODU_output_I,
-        MODU_output_valid  => MODU_output_valid
+        MODU_output_valid  => MODU_output_valid,
+        MODU_output_ready  => MODU_output_ready
     );
 
     clk_100MHz <= not clk_100MHz after CLK_100MHz_Period_HALF;

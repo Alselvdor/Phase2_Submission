@@ -13,8 +13,11 @@ entity INTER is
 
         INTER_Input_data                        : in    std_logic; 
         INTER_input_valid                       : in    std_logic; 
+        INTER_input_ready                       : in    std_logic; 
+
         INTER_Output_data                       : out   std_logic;
-        INTER_Output_valid                      : out   std_logic 
+        INTER_Output_valid                      : out   std_logic;
+        INTER_Output_ready                     : out   std_logic  
     );
 end INTER;
 

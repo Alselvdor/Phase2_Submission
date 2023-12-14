@@ -15,8 +15,11 @@ architecture INTER_tb_rtl of INTER_tb is
 
         INTER_Input_data                        : in    std_logic; 
         INTER_input_valid                       : in    std_logic; 
+        INTER_input_ready                       : in    std_logic; 
+
         INTER_Output_data                       : out   std_logic;
-        INTER_Output_valid                      : out   std_logic 
+        INTER_Output_valid                      : out   std_logic;
+        INTER_Output_ready                     : out   std_logic  
     );
     end component;
 
@@ -26,7 +29,9 @@ architecture INTER_tb_rtl of INTER_tb is
     --signals 
     signal clk                                    : std_logic := '0'; 
     signal reset                                  : std_logic; 
-    signal INTER_input_valid                                     : std_logic; 
+    signal INTER_input_valid                                     : std_logic;
+    signal INTER_input_ready                                     : std_logic; 
+
     signal test_in_vector                         : std_logic_vector(191 downto 0) := x"2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA";
     signal test_out_vector                        : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
     signal INTER_Expected_Output                  : std_logic_vector(191 downto 0) := INTER_VECTOR_OUTPUT;
@@ -34,6 +39,8 @@ architecture INTER_tb_rtl of INTER_tb is
     signal INTER_Output_data                           : std_logic;
     signal test_pass_INTER_encoder                : boolean := true;
     signal INTER_Output_valid                              : std_logic;
+    signal INTER_Output_ready                              : std_logic;
+
     signal flag                                   : std_logic := '0';
 
 
@@ -43,8 +50,10 @@ begin
     uut: INTER port map (clk_100mhz => clk, reset => reset, 
                         INTER_Input_data => INTER_Input_data,
                         INTER_input_valid => INTER_input_valid, 
+                        INTER_input_ready => INTER_input_ready, 
                         INTER_Output_data => INTER_Output_data,
-                        INTER_Output_valid => INTER_Output_valid 
+                        INTER_Output_valid => INTER_Output_valid,
+                        INTER_Output_ready => INTER_Output_ready 
                         );
 
     --clk process 

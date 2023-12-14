@@ -12,11 +12,13 @@ entity MODU is
 
             MODU_input_data       :IN  std_logic; 
             MODU_input_valid      :IN  std_logic;
+            MODU_input_ready      :IN  std_logic;
 
 
             MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
             MODU_output_I         :OUT std_logic_vector(15 DOWNTO 0);
-            MODU_output_valid     :OUT std_logic
+            MODU_output_valid     :OUT std_logic;
+            MODU_output_ready     :OUT std_logic
     );
 end MODU;
 
