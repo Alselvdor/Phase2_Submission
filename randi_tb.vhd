@@ -21,8 +21,8 @@ architecture randi_tb_rtl of randi_tb is
 
 
             randi_output_data   : OUT std_logic;
-            randi_output_valid  : OUT std_logic;
-            randi_output_ready  : OUT std_logic
+            randi_output_valid  : OUT std_logic
+    --        randi_output_ready  : OUT std_logic
 
         );
     end component;
@@ -54,8 +54,8 @@ begin
         randi_input_valid      => randi_input_valid,  
         randi_input_ready      => randi_input_ready,  
         randi_output_valid     => randi_output_valid,          
-        randi_output_data      => randi_output_data,
-        randi_output_ready     => randi_output_ready
+        randi_output_data      => randi_output_data
+   --     randi_output_ready     => randi_output_ready
         );
 
     --clock process 
@@ -88,6 +88,7 @@ begin
         test_pass_RANDI <= true;  -- Reset the test flag for MODU Q outputs
 
         procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, randi_output_data, RANDI_Output_Expected, test_pass_RANDI);
+        
         
         report procedure_Break_Notice;
         assert test_pass_RANDI = false 

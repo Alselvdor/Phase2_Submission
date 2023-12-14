@@ -16,8 +16,8 @@ entity randi is
 
 
                 randi_output_data   : OUT std_logic;
-                randi_output_valid  : OUT std_logic;
-                randi_output_ready  : OUT std_logic
+                randi_output_valid  : OUT std_logic
+          --      randi_output_ready  : OUT std_logic
 
             );
 end randi;

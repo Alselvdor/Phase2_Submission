@@ -14,7 +14,7 @@ architecture MODU_tb_rtl of MODU_tb is
 
             MODU_input_data       :IN  std_logic; 
             MODU_input_valid      :IN  std_logic;
-            MODU_input_ready      :IN  std_logic;
+   --         MODU_input_ready      :IN  std_logic;
 
 
             MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
@@ -52,7 +52,7 @@ begin
         reset              => reset,
         MODU_input_data    => MODU_input_data,
         MODU_input_valid   => MODU_input_valid,
-        MODU_input_ready   => MODU_input_ready,
+     --   MODU_input_ready   => MODU_input_ready,
 
 
         MODU_output_Q      => MODU_output_Q,
