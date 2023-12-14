@@ -1,0 +1,33 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "INTER_OUTput_data",
+					"strict" : false
+				},
+				{
+					"name" : "INTER_OUTput_valid",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "INTER_INput_ready",
+					"strict" : false
+				},
+				{
+					"name" : "INTER_INput_data",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,37 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "FEC_output_data",
+					"strict" : false
+				},
+				{
+					"name" : "FEC_output_valid",
+					"strict" : false
+				},
+				{
+					"name" : "FEC_input_data",
+					"strict" : false
+				},
+				{
+					"name" : "clk_50mhz",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "FEC_input_valid",
+					"strict" : false
+				},
+				{
+					"name" : "clk_100mhz",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

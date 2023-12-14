@@ -1,0 +1,70 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+USE IEEE.numeric_std.all;
+
+ENTITY MODU_tb IS END ENTITY;
+
+architecture MODU_tb_rtl of MODU_tb IS
+
+    component MODU IS
+            PORT (
+                MODU_input_data       :IN  std_logic; 
+                MODU_input_ready      :IN  std_logic;
+                clk_100MHz            :IN  std_logic;
+                clk_50MHz             :IN  std_logic;                     
+                reset                 :IN  std_logic;
+                MODU_output_valid     :OUT std_logic;
+                MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
+                MODU_output_I         :OUT std_logic_vector(15 DOWNTO 0)
+            );
+    END component;
+SIGNAL clk_50MHz     	: std_logic := '1';
+SIGNAL clk_100MHz   	: std_logic := '1';
+SIGNAL PERIOD_50MHz	    : time	:= 20 ns;
+SIGNAL PERIOD_100MHZ	: time	:= 10 ns;
+
+signal clk_50MHz, clk_100MHz, reset, MODU_input_ready, MODU_input_data: std_logic := '0';
+signal MODU_output_Q: std_logic_vector(15 downto 0);
+signal MODU_output_I: std_logic_vector(15 downto 0);
+signal test: std_logic_vector(15 downto 0);
+signal ROM_output: std_logic_vector(0 to 1535) := X"5A7F_5A7F_A581_A581_5A7F_5A7F_5A7F_5A7F_5A7F_A581_A581_5A7F_A581_A581_A581_A581_5A7F_5A7F_5A7F_A581_A581_A581_5A7F_A581_A581_A581_5A7F_5A7F_A581_5A7F_5A7F_5A7F_A581_A581_5A7F_A581_5A7F_5A7F_A581_5A7F_5A7F_5A7F_5A7F_A581_5A7F_5A7F_A581_A581_5A7F_5A7F_A581_5A7F_5A7F_5A7F_5A7F_5A7F_A581_A581_A581_5A7F_A581_A581_5A7F_A581_5A7F_5A7F_A581_5A7F_A581_A581_5A7F_A581_5A7F_5A7F_A581_A581_A581_5A7F_5A7F_5A7F_A581_5A7F_5A7F_5A7F_A581_5A7F_5A7F_A581_A581_A581_A581_5A7F_5A7F_5A7F_A581_A581";
+signal ROM_input: std_logic_vector(0 to 191) := X"4B047DFA42F2A5D5F61C021A5851E9A309A24FD58086BD1E";
+signal OUTPUT_MODU: std_logic_vector(0 to 1535) := X"A581_5A7F_5A7F_A581_5A7F_5A7F_A581_5A7F_A581_A581_A581_A581_A581_A581_5A7F_5A7F_A581_5A7F_5A7F_5A7F_A581_A581_5A7F_5A7F_5A7F_5A7F_A581_A581_A581_A581_A581_A581_A581_A581_A581_5A7F_5A7F_A581_A581_5A7F_5A7F_5A7F_5A7F_5A7F_5A7F_A581_5A7F_5A7F_A581_A581_5A7F_5A7F_A581_A581_5A7F_A581_A581_5A7F_5A7F_A581_5A7F_5A7F_5A7F_A581_5A7F_5A7F_5A7F_A581_5A7F_5A7F_5A7F_5A7F_A581_5A7F_A581_A581_A581_A581_A581_A581_5A7F_5A7F_5A7F_5A7F_5A7F_5A7F_A581_5A7F_5A7F_A581_A581_A581_5A7F_A581_A581_5A7F";
+
+signal MODU_output_valid: std_logic;
+begin
+
+    clk_50MHz  <= NOT clk_50MHz  AFTER PERIOD_50MHz/2;   -- clk_50MHz
+    clk_100MHz <= NOT clk_100MHz AFTER PERIOD_100MHZ/2;   -- clk_100MHz
+
+    dut: MODU port map(MODU_input_data => MODU_input_data, MODU_input_ready =>MODU_input_ready, clk_50MHz =>clk_50MHz, clk_100MHz =>clk_100MHz, reset =>reset, MODU_output_valid => MODU_output_valid, MODU_output_Q => MODU_output_Q, MODU_output_I => MODU_output_I);
+    process
+    variable tb_test: boolean;
+    begin
+        reset <= '1'; wait for (2* PERIOD);
+        reset <= '0';
+        wait for PERIOD;
+
+        for i in 0 to 181 loop
+            MODU_input_ready <= '1';
+            MODU_input_data <= ROM_input(i);
+            wait for PERIOD;
+        END loop;
+        MODU_input_ready <= '0';
+        MODU_input_data <= '1';
+        wait for PERIOD;
+        MODU_input_ready <= '0';
+        MODU_input_data <= '0';
+        wait for 2*PERIOD;
+        for j in 182 to 191 loop
+            MODU_input_ready <= '1';
+            MODU_input_data <= ROM_input(j);
+            wait for PERIOD;
+        END loop;
+        MODU_input_ready <= '0';
+        MODU_input_data <= '1';
+        wait;
+
+    END process ;
+
+END MODU_tb_rtl;

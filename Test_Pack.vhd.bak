@@ -1,0 +1,72 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+package Test_Pack is 
+--=============================================================================================
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Constants %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+--=============================================================================================
+    --%%%%%%% Common:
+    --------------- A) Clocks:
+    constant CLK_50MHz_Period                      : Time:= 20 ns; 
+    constant CLK_50MHz_Period_test                 : Time:= CLK_50MHz_Period / 2; 
+    constant CLK_100MHz_Period                     : Time:= 10 ns; 
+    constant CLK_100MHz_Period_test                : Time:= CLK_100MHz_Period / 2; 
+    --------------- B) SIM Notice:
+    constant procedure_start_SIMULATION_Notice               : string := "----------------- Simulation procedure_started -----------";
+    constant END_SIMULATION_Notice                 : string := "----------------- Simulation Finished -----------"; 
+    --%%%%%%% Block Specfic :
+    ------------------------ A) Randi
+    constant RANDI_VECTOR_INPUT      : std_logic_vector(95 downto 0)  := x"ACBCD2114DAE1577C6DBF4C9"; 
+    constant RANDI_VECTOR_OUTPUT     : std_logic_vector(95 downto 0)  := x"558AC4A53A1724E163AC2BF9";
+    ------------------------ B) FEC 
+    constant FEC_VECTOR_INPUT             : std_logic_vector(95 downto 0)  := x"558AC4A53A1724E163AC2BF9";
+    ------------------------ C) INTER
+    constant INTER_VECTOR_INPUT           : std_logic_vector(191 downto 0) := x"2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA";
+    ------------------------ D) MODU 
+    constant ZeroTS                      : std_logic_vector(15 downto 0)  := "0101101001111111";
+    constant NZeroTS                     : std_logic_vector(15 downto 0)  := "1010010110000001";
+    constant MODU_VECTOR_INPUT           : std_logic_vector(191 downto 0) := x"4B047DFA42F2A5D5F61C021A5851E9A309A24FD58086BD1E";
+    -- constant MODU_VECTOR_INPUT_2      : std_logic_vector(191 downto 0) := x"4B047DFA42F2A5D5F61C021A5851E9A309A24FD58087BD1E";
+--====================================================================================================================
+
+
+--============================================================================================================
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    Functions & Procedures       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+--============================================================================================================
+    -- procedures 
+    --fill input 
+    procedure procedure_96_inputs   (procedure_start, procedure_end : in integer; input_vector : std_logic_vector(95 downto 0); signal Test_bit_output : out std_logic); 
+    procedure procedure_192_inputs  (procedure_start, procedure_end : in integer; input_vector : std_logic_vector(191 downto 0); signal Test_bit_output : out std_logic); 
+    procedure procedure_192_outputs (procedure_start, procedure_end : in integer; signal output_vector : out std_logic_vector(191 downto 0); signal Test_bit_output : in std_logic);
+--====================================================================================================================  
+end package Test_Pack;
+
+package body Test_Pack is 
+    --procedures
+    --fill input 
+    procedure procedure_96_inputs (procedure_start, procedure_end : in integer; input_vector : std_logic_vector(95 downto 0); signal Test_bit_output : out std_logic) is 
+        begin 
+            for i in procedure_end downto procedure_start loop    
+                Test_bit_output <= input_vector(i); 
+                wait for CLK_50MHz_Period;                
+            end loop; 
+    end procedure_96_inputs;
+    
+    procedure procedure_192_inputs (procedure_start, procedure_end : in integer; input_vector : std_logic_vector(191 downto 0); signal Test_bit_output : out std_logic) is 
+        begin 
+            for i in procedure_end downto procedure_start loop 
+                Test_bit_output <= input_vector(i);
+                wait for CLK_100MHz_Period; 
+            end loop;
+    end procedure_192_inputs;
+ 
+    --fill output 
+    procedure procedure_192_outputs (procedure_start, procedure_end : in integer; signal output_vector : out std_logic_vector(191 downto 0);  signal Test_bit_output : in std_logic) is 
+        begin 
+            for i in procedure_end downto procedure_start loop 
+                output_vector(i) <= Test_bit_output;
+                wait  for CLK_100MHz_Period; 
+            end loop; 
+    end procedure_192_outputs;
+end package body Test_Pack; 

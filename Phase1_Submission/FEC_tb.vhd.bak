@@ -1,0 +1,100 @@
+library ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
+ENTITY FEC_tb IS END ENTITY;
+
+ARCHITECTURE FEC_tb_rtl of FEC_tb IS
+
+    COMPONENT FEC IS
+        PORT
+        (
+            clk_50MHz                  : IN  std_logic;
+            clk_100MHz                 : IN  std_logic;
+            reset                      : IN  std_logic;
+            FEC_INput_data             : IN  std_logic;
+            FEC_INput_ready            : IN  std_logic;
+            FEC_output_valid           : OUT std_logic;
+            FEC_output_data            : OUT STD_LOGIC_VECTOR (0 DOWNTO 0)
+        );
+        END component;
+
+        SIGNAL clk_50MHz, clk_100MHz 	: std_logic := '1';
+        SIGNAL PERIOD_50MHz	            :	time	:= 40 ns;
+        SIGNAL PERIOD_100MHZ	        :	time	:= 20 ns;
+        
+        SIGNAL ROM_input	 :	std_logic_vector((96 - 1) DOWNTO 0) := X"558AC4A53A1724E163AC2BF9";
+        SIGNAL ROM_output    :	std_logic_vector ((192*2 - 1) DOWNTO 0):= X"2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA";
+        SIGNAL OUTPUT_FEC	 :	std_logic_vector((192*2 - 1) DOWNTO 0);
+        
+        SIGNAL reset            : std_logic := '0';
+        SIGNAL FEC_output_valid : std_logic := '0';
+        SIGNAL FEC_INput_data   : std_logic := '0';
+        SIGNAL FEC_INput_ready  : std_logic := '0';
+		SIGNAL FEC_output_data  : STD_LOGIC_VECTOR (0 DOWNTO 0);
+		SIGNAL temp             : std_logic;
+        SIGNAL test_reset       : std_logic := '0';
+
+        BEGIN
+        clk_50MHz  <= NOT clk_50MHz  AFTER PERIOD_50MHz/2;
+        clk_100MHz <= NOT clk_100MHz AFTER PERIOD_100MHZ/2;
+        
+        randi1: FEC 
+            PORT map(clk_100MHz => clk_100MHz, clk_50MHz=>clk_50MHz, reset => reset, FEC_output_data => FEC_output_data, FEC_output_valid => FEC_output_valid, FEC_INput_data => FEC_INput_data, FEC_INput_ready => FEC_INput_ready);
+        
+        FECTEST : PROCESS
+        BEGIN
+            -- reset test:
+            IF test_reset = '0' THEN
+                reset <= '1'; -- Set reset to '1' INitially
+                FEC_INput_ready <= '0';
+                WAIT FOR PERIOD_50MHz;
+                ASSERT FEC_output_valid = '0'
+                    REPORT "reset error"
+                    SEVERITY NOTe;
+        
+                FOR i IN FEC_output_data'range LOOP
+                    ASSERT FEC_output_data(i) = '0'
+                        REPORT "reset error"
+                        SEVERITY NOTe;
+                END LOOP;
+        
+                test_reset <= '1';
+            ELSE
+                reset <= '0';  -- De-ASSERT reset AFTER INitialization
+                FEC_INput_ready <= '1';
+        
+                -- INput LOOP:
+                WAIT FOR PERIOD_50MHz;
+                ASSERT FEC_INput_data = '0' and FEC_INput_ready = '1'
+                    REPORT "INput NOT stable"
+                    SEVERITY note;
+        
+                FOR i IN (96 - 1) DOWNTO 0 LOOP
+                    FEC_INput_data <= ROM_input(i);
+                    WAIT FOR PERIOD_50MHz;
+                END LOOP;
+            END IF;
+        END PROCESS;
+        
+    PROCESS
+    BEGIN	
+        --output verIFication LOOP:
+        WAIT UNTIL (FEC_output_valid = '1' and temp = '1');  -- Adjust the condition as needed
+        FOR k IN (192*2 - 1) DOWNTO 0 LOOP
+            WAIT FOR (PERIOD_100MHZ);
+            temp <= FEC_output_data(0);
+            OUTPUT_FEC(k) <= temp;
+            ASSERT(FEC_output_data(0) = ROM_output(k) and FEC_output_valid ='1') 
+            REPORT "Data sequence mISmatch" 
+            SEVERITY NOTe;
+        END LOOP;
+
+        WAIT FOR PERIOD_100MHZ;
+        ASSERT(OUTPUT_FEC = ROM_output) 
+        REPORT "Data sequence mISmatch IN the whole" 
+        SEVERITY NOTe;
+        WAIT;
+    END PROCESS;
+    
+END FEC_tb_rtl;

@@ -1,0 +1,67 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use IEEE.NUMERIC_STD.ALL;
+
+entity INTER is
+    port(
+        INTER_input_data   : in  std_logic;
+        INTER_input_ready  : in  std_logic;
+        clk                : in  std_logic;
+        reset              : in  std_logic;
+        INTER_output_data  : out std_logic;
+        INTER_output_valid : out std_logic
+        );
+end INTER;
+
+architecture INTER_rtl of INTER is
+    signal inter_in        : std_logic_vector(191 downto 0);
+    signal inter_out       : std_logic_vector(191 downto 0);
+    signal shift_done_r_r  : std_logic;
+	signal sipo_piso_ready : std_logic;
+    
+    component piso is
+    port (
+        data_out_r    : out std_logic;
+        data_in       : in  std_logic_vector (191 downto 0); 
+	    ready_in      : in  std_logic;
+        shift_done    : in  std_logic;         
+        clk           : in  std_logic;                     
+        rst           : in  std_logic;
+        shift_valid   : out std_logic                      
+        );
+    end component;
+
+    component sipo is
+     port (
+          data_out_r     : out std_logic_vector (191 downto 0);
+          data_in        : in  std_logic;
+          ready_in       : in  std_logic;  
+          clk            : in  std_logic;    
+          rst            : in  std_logic;      
+          shift_done     : out std_logic;
+		  sipo_ready_out : out std_logic
+          );
+    end component;
+begin
+
+    piso_r: piso
+    port map(data_out_r => INTER_output_data, data_in => inter_out, ready_in => sipo_piso_ready, shift_done => shift_done_r_r, clk => clk, rst => reset, shift_valid => INTER_output_valid);
+    
+    sipo_r: sipo
+    port map(data_out_r => inter_in, data_in => INTER_input_data, ready_in => INTER_input_ready, clk => clk, rst => reset, shift_done => shift_done_r_r, sipo_ready_out => sipo_piso_ready);
+
+    inter : process(shift_done_r_r,inter_in)
+    variable mk : integer := 0;
+begin
+    if (shift_done_r_r = '1') then
+        for i in 0 to 191 loop
+            mk := 12 * (i mod 16) + to_integer(shift_right(to_unsigned(i,32),4));
+            inter_out(mk) <= inter_in(i);
+        end loop;
+	else inter_out <= inter_in;
+
+    end if;
+
+end process;
+end INTER_rtl;

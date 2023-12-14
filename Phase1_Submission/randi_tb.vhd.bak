@@ -1,0 +1,68 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
+ENTITY randi_tb is END randi_tb;
+
+ARCHITECTURE randi_tb_rtl OF randi_tb IS
+    COMPONENT randi
+        PORT
+        (
+            clk                 : IN  std_logic;
+            reset               : IN  std_logic;
+            randi_input_data    : IN  std_logic;
+            randi_input_ready   : IN  std_logic;
+            randi_output_valid  : OUT std_logic;
+            randi_output_data   : OUT std_logic
+        );
+    END COMPONENT;
+
+    SIGNAL reset			  : std_logic  := '0';
+    SIGNAL randi_input_ready  : std_logic  := '0';
+    SIGNAL randi_input_data   : std_logic  := '0';
+    SIGNAL randi_output_valid : std_logic  := '0';
+    SIGNAL randi_output_data  : std_logic; 
+    SIGNAL clk 			      : std_logic  := '0';
+	constant PERIOD			  : time	   := 40 ns;
+
+    SIGNAL data_in_rom   : std_logic_vector(0 TO 95) := X"ACBCD2114DAE1577C6DBF4C9";
+    SIGNAL data_out_rom  : std_logic_vector(0 TO 95) := X"558AC4A53A1724E163AC2BF9";
+
+BEGIN 
+    clk <= NOT clk AFTER PERIOD / 2;
+    uut : randi 
+        PORT MAP (clk, reset, randi_input_data, randi_input_ready, randi_output_valid, randi_output_data);
+    dut : PROCESS
+        VARIABLE tb_test: boolean;
+        BEGIN 
+            reset <= '1'; WAIT FOR 2.5*PERIOD;
+            randi_input_ready <= '1';
+            WAIT UNTIL falling_edge(clk);
+                reset <= '0';
+                FOR i IN 0 TO 95 LOOP
+                    randi_input_data <= data_in_rom(i);
+                    WAIT UNTIL rising_edge(clk);
+                        WAIT FOR 1 ps;
+                        if (randi_output_data = data_out_rom(i) and randi_output_valid='1')
+                            THEN
+                                tb_test := true;
+                            ELSE
+                                tb_test := false;
+                            END IF;
+                        ASSERT tb_test
+                            REPORT "test failed."
+                            SEVERITY note;
+                    WAIT UNTIL falling_edge(clk);
+                END LOOP;
+            WAIT FOR PERIOD;
+            randi_input_ready <= '0';
+            randi_input_data <= '0';
+            WAIT FOR PERIOD;
+            randi_input_ready <= '0';
+            randi_input_data <= '1';
+            WAIT FOR PERIOD;
+            randi_input_ready <= '0';
+            randi_input_data <= '0';
+            WAIT;
+    END PROCESS ;
+END randi_tb_rtl;

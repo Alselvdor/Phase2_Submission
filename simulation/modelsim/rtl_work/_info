@@ -1,0 +1,136 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dD:/AUC/ASIC/Project/Phase2_Submission/simulation/modelsim
+Emodu
+Z1 w1702537676
+Z2 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+R0
+Z5 8D:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd
+Z6 FD:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd
+l0
+L5
+VZ5gh:F^SCY<o]dm>cA4fP0
+!s100 8=bblS<GPICU7DA9h[>`A1
+Z7 OV;C;10.5b;63
+31
+Z8 !s110 1702538334
+!i10b 1
+Z9 !s108 1702538334.000000
+Z10 !s90 -reportprogress|300|-93|-work|work|D:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd|
+Z11 !s107 D:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd|
+!i113 1
+Z12 o-93 -work work
+Z13 tExplicit 1 CvgOpt 0
+Amodu_rtl
+R2
+R3
+R4
+DEx4 work 4 modu 0 22 Z5gh:F^SCY<o]dm>cA4fP0
+l29
+L17
+VEV4JK0[>_lSY[o]M2<iZS0
+!s100 [m=6]=6]mzJdL_4`1`Xnj0
+R7
+31
+R8
+!i10b 1
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Emodu_tb
+Z14 w1702538238
+Z15 DPx4 work 9 test_pack 0 22 M5[I7j]hcOcejUPCg^3SW0
+R2
+R3
+R4
+R0
+Z16 8D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd
+Z17 FD:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd
+l0
+L6
+V0oom4a:n_Dl_92B_bNkMT0
+!s100 jWULY>R=8z_jX_DReQH1h2
+R7
+32
+Z18 !s110 1702538356
+!i10b 1
+Z19 !s108 1702538356.000000
+Z20 !s90 -reportprogress|300|-work|work|D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd|
+Z21 !s107 D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd|
+!i113 1
+Z22 o-work work
+R13
+Amodu_tb_rtl
+R15
+R2
+R3
+R4
+DEx4 work 7 modu_tb 0 22 0oom4a:n_Dl_92B_bNkMT0
+l39
+L9
+V6B^56O]?gE:NIY0fN_QKX3
+!s100 3YWA_>f^OH>0WC>9GkW4G1
+R7
+32
+R18
+!i10b 1
+R19
+R20
+R21
+!i113 1
+R22
+R13
+Ptest_pack
+R2
+R3
+R4
+Z23 w1702538040
+R0
+Z24 8D:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd
+Z25 FD:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd
+l0
+L5
+VM5[I7j]hcOcejUPCg^3SW0
+!s100 DCNcc3n^RQCDeYj<_j1HZ1
+R7
+32
+b1
+Z26 !s110 1702538354
+!i10b 1
+Z27 !s108 1702538354.000000
+Z28 !s90 -reportprogress|300|-work|work|D:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd|
+Z29 !s107 D:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd|
+!i113 1
+R22
+R13
+Bbody
+R15
+R2
+R3
+R4
+l0
+L66
+VaD8KJh9>iE2Y=SZ@R0aik1
+!s100 j_7eRFfHggUHUPWJXBF6k3
+R7
+32
+R26
+!i10b 1
+R27
+R28
+R29
+!i113 1
+R22
+R13

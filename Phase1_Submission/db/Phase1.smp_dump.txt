@@ -1,0 +1,7 @@
+
+State Machine - |FEC|status_reg
+Name status_reg.transmit status_reg.encoding status_reg.recieve status_reg.idle 
+status_reg.idle 0 0 0 0 
+status_reg.recieve 0 0 1 1 
+status_reg.encoding 0 1 0 1 
+status_reg.transmit 1 0 0 1 

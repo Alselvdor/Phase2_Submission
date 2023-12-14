@@ -1,0 +1,156 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY FEC IS
+    PORT (
+        clk_50MHz          : IN  STD_LOGIC;
+        clk_100MHz         : IN  STD_LOGIC;
+        reset              : IN  STD_LOGIC;
+        FEC_input_data     : IN  STD_LOGIC;
+        FEC_input_ready    : IN  STD_LOGIC;
+        FEC_output_valid   : OUT STD_LOGIC;
+        FEC_output_data    : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    );
+END ENTITY FEC;
+
+ARCHITECTURE FEC_rtl OF FEC IS
+    FUNCTION XOR_REDUCE(signal_vector : IN STD_LOGIC_VECTOR) RETURN STD_LOGIC IS
+        VARIABLE result : STD_LOGIC := '0';
+    BEGIN
+        FOR i IN signal_vector'RANGE LOOP
+            result := result XOR signal_vector(i);
+        END LOOP;
+        RETURN result;
+    END XOR_REDUCE;
+
+    COMPONENT PPL_BLOCK IS
+        PORT (
+            address_a    : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            address_b    : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+            clock_a      : IN STD_LOGIC := '1';
+            clock_b      : IN STD_LOGIC;
+            data_a       : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+            data_b       : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+            wren_a       : IN STD_LOGIC := '0';
+            wren_b       : IN STD_LOGIC := '0';
+            q_a          : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            q_b          : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    TYPE status_type IS (idle, recieve, encoding, transmit);
+    SIGNAL status_reg      : status_type := idle;
+    SIGNAL status_next     : status_type;
+
+    SIGNAL x                   : STD_LOGIC_VECTOR(0 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL y                   : STD_LOGIC_VECTOR(0 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL FEC_input_data_reg  : STD_LOGIC := '0';
+    SIGNAL counter             : UNSIGNED(7 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL counter_out         : UNSIGNED(8 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL int_reg             : STD_LOGIC_VECTOR(5 DOWNTO 0) := (OTHERS => '0');
+
+    SIGNAL FEC_output_valid_d  : STD_LOGIC := '0';
+    SIGNAL FEC_output_valid_r  : STD_LOGIC := '0';
+    SIGNAL FEC_output_valid_rr : STD_LOGIC := '0';
+
+    SIGNAL address_a           : STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL address_b           : STD_LOGIC_VECTOR(8 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL data_a              : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL data_b              : STD_LOGIC_VECTOR(0 DOWNTO 0) := "0";
+    SIGNAL wren_a              : STD_LOGIC := '0';
+    SIGNAL wren_b              : STD_LOGIC := '0';
+    SIGNAL q_a                 : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL q_b                 : STD_LOGIC_VECTOR(0 DOWNTO 0);
+
+BEGIN
+    RAM2PORTS : PPL_BLOCK
+    PORT MAP (
+        address_a, address_b, clk_50MHz, clk_100MHz, data_a, data_b, wren_a, wren_b, q_a, q_b
+    );
+
+    PROCESS(clk_50MHz, reset)
+    BEGIN
+        IF (reset = '1') THEN
+            status_reg <= idle;
+            counter <= (OTHERS => '0');
+            data_a <= (OTHERS => '0');
+            int_reg <= (OTHERS => '0');
+        ELSIF (clk_50MHz'EVENT AND clk_50MHz = '1') THEN
+            status_reg <= status_next;
+            IF (status_reg = recieve OR status_next = recieve OR status_reg = encoding OR status_next = encoding) THEN
+                int_reg <= FEC_input_data_reg & int_reg(5 DOWNTO 1);
+            END IF;
+            IF (status_reg = recieve OR status_reg = encoding) THEN
+                counter <= counter + 1;
+                IF (counter = 191) THEN
+                    counter <= (OTHERS => '0');
+                END IF;
+                data_a <= y & x;
+            ELSE
+                counter <= (OTHERS => '0');
+                data_a <= (OTHERS => '0');
+            END IF;
+        END IF;
+    END PROCESS;
+
+    PROCESS(clk_100MHz, reset)
+    BEGIN
+        IF (reset = '1') THEN
+            counter_out <= (OTHERS => '0');
+            FEC_output_valid_r <= '0';
+            FEC_output_valid_rr <= '0';
+            FEC_output_valid_d <= '0';
+        ELSIF (clk_100MHz'EVENT AND clk_100MHz = '1') THEN
+            FEC_output_valid_d <= '0';
+            FEC_output_valid_r <= FEC_output_valid_d;
+            FEC_output_valid_rr <= FEC_output_valid_r;
+            IF (status_next = encoding OR status_next = transmit OR status_reg = transmit) THEN
+                address_b <= STD_LOGIC_VECTOR(counter_out);
+                counter_out <= counter_out + 1;
+                IF (counter_out = 383) THEN
+                    counter_out <= (OTHERS => '0');
+                END IF;
+            END IF;
+            IF (status_reg = encoding OR status_reg = transmit) THEN
+                FEC_output_valid_d <= '1';
+            END IF;
+        END IF;
+    END PROCESS;
+
+    CTRL_FSM: PROCESS(status_reg, FEC_input_ready, counter, counter_out)
+    BEGIN
+        status_next <= status_reg;
+        address_a <= (OTHERS => '0');
+        wren_a <= '1';
+        wren_b <= '0';
+        CASE status_reg IS
+            WHEN idle =>
+                IF (FEC_input_ready = '1') THEN
+                    status_next <= recieve;
+                END IF;
+            WHEN recieve =>
+                address_a <= STD_LOGIC_VECTOR(counter);
+                IF (counter >= 96) THEN
+                    status_next <= encoding;
+                END IF;
+            WHEN encoding =>
+                address_a <= STD_LOGIC_VECTOR(counter);
+                IF (FEC_input_ready = '0') THEN
+                    status_next <= transmit;
+                END IF;
+            WHEN transmit =>
+                IF (counter_out = 191 OR counter_out = 383) THEN
+                    status_next <= idle;
+                END IF;
+        END CASE;
+    END PROCESS CTRL_FSM;
+
+    x(0) <= XOR_REDUCE((FEC_input_data_reg & int_reg) AND "1111001");
+    y(0) <= XOR_REDUCE((FEC_input_data_reg & int_reg) AND "1011011");
+    FEC_output_data <= q_b;
+    data_b <= (OTHERS => '0');
+    FEC_input_data_reg <= FEC_input_data WHEN FEC_input_ready = '1' ELSE '0';
+    FEC_output_valid <= FEC_output_valid_d OR FEC_output_valid_r OR FEC_output_valid_rr;
+
+END ARCHITECTURE FEC_rtl;

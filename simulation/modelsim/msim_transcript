@@ -1,0 +1,110 @@
+# Reading C:/intelFPGA_lite/18.1/modelsim_ase/tcl/vsim/pref.tcl
+# do testfec_run_msim_rtl_vhdl.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
+# vmap work rtl_work 
+# Copying C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vcom -93 -work work {D:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd}
+# Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 09:18:54 on Dec 14,2023
+# vcom -reportprogress 300 -93 -work work D:/AUC/ASIC/Project/Phase2_Submission/MODU.vhd 
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity MODU
+# -- Compiling architecture MODU_rtl of MODU
+# End time: 09:18:54 on Dec 14,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vcom -93 -work work {D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd}
+# Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 09:18:55 on Dec 14,2023
+# vcom -reportprogress 300 -93 -work work D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd 
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# ** Error: (vcom-11) Could not find work.test_pack.
+# ** Error (suppressible): D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd(4): (vcom-1195) Cannot find expanded name "work.Test_Pack".
+# ** Error: D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd(4): Unknown expanded name.
+# ** Error: D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd(6): VHDL Compiler exiting
+# End time: 09:18:55 on Dec 14,2023, Elapsed time: 0:00:00
+# Errors: 4, Warnings: 0
+# ** Error: C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/vcom failed.
+# Error in macro ./testfec_run_msim_rtl_vhdl.do line 10
+# C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/vcom failed.
+#     while executing
+# "vcom -93 -work work {D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd}"
+vcom -reportprogress 300 -work work D:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd
+# Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 09:19:14 on Dec 14,2023
+# vcom -reportprogress 300 -work work D:/AUC/ASIC/Project/Phase2_Submission/Test_Pack.vhd 
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling package Test_Pack
+# -- Compiling package body Test_Pack
+# -- Loading package Test_Pack
+# End time: 09:19:14 on Dec 14,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vcom -reportprogress 300 -work work D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd
+# Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 09:19:16 on Dec 14,2023
+# vcom -reportprogress 300 -work work D:/AUC/ASIC/Project/Phase2_Submission/MODU_tb.vhd 
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Loading package Test_Pack
+# -- Compiling entity MODU_tb
+# -- Compiling architecture MODU_tb_rtl of MODU_tb
+# End time: 09:19:16 on Dec 14,2023, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim work.modu_tb
+# vsim work.modu_tb 
+# Start time: 09:19:21 on Dec 14,2023
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.test_pack(body)
+# Loading work.modu_tb(modu_tb_rtl)
+# Loading work.modu(modu_rtl)
+# Trace back: Error QStructure::sort: invalid command name ""
+#   <6:proc:11: ::QStructure::sort .main_pane.structure 0 descending
+#   <5:eval:1: ::QStructure::structsort .main_pane.structure 0 descending
+#   <4:eval:1: ::namespace inscope ::QStructure {structsort .main_pane.structure} 0 descending
+#   >3:proc:26: ::.main_pane.structure.interior.cs.body.struct sort 0 descending
+#   >2:proc:10: ::.main_pane.structure.interior.cs.body.struct _initializeSortColumn
+#   <1:eval:1: ::namespace inscope ::vsimwidgets::Hierarchy {::.main_pane.structure.interior.cs.body.struct _initializeSortColumn}
+add wave -position insertpoint  \
+sim:/modu_tb/clk_100MHz \
+sim:/modu_tb/reset \
+sim:/modu_tb/MODU_input_ready \
+sim:/modu_tb/test_in_vector \
+sim:/modu_tb/test_out_vector_Q \
+sim:/modu_tb/test_out_vector_I \
+sim:/modu_tb/MODU_Expected_Output_Q \
+sim:/modu_tb/MODU_Expected_Output_I \
+sim:/modu_tb/MODU_input_data \
+sim:/modu_tb/MODU_output_Q \
+sim:/modu_tb/MODU_output_I \
+sim:/modu_tb/MODU_output_valid \
+sim:/modu_tb/flag \
+sim:/modu_tb/test_pass_MODU_encoder_I \
+sim:/modu_tb/test_pass_MODU_encoder_Q
+run
+run 2 us
+# Modified modelsim.ini
+run 5 us
+
+# End time: 12:21:25 on Dec 14,2023, Elapsed time: 3:02:04
+# Errors: 14, Warnings: 0

@@ -1,0 +1,70 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity subSIPO_tb is
+END subSIPO_tb;
+
+architecture subSIPO_tb_rtl of subSIPO_tb is
+    COMPONENT subSIPO IS
+        port (
+            subSIPO_input_data   : in  std_logic;
+            subSIPO_input_ready  : in  std_logic;
+            clk                  : in  std_logic;
+            reset                : in  std_logic;
+            DoneShifting         : out std_logic;
+            subSIPO_output_data  : out std_logic_vector (191 downto 0);
+            subSIPO_output_valid : out std_logic
+        );
+    END COMPONENT;
+
+    signal clk: std_logic := '0';
+    signal reset: std_logic := '0';
+    signal subSIPO_input_ready: std_logic := '0';
+    signal subSIPO_input_data: std_logic;
+    signal DoneShifting: std_logic;
+    signal subSIPO_output_data: std_logic_vector(191 downto 0);
+    signal subSIPO_output_valid: std_logic;
+    signal ROM_input: std_logic_vector(0 to 191) := X"2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA";
+    constant PERIOD : time := 10 ns;
+
+begin
+    clk <= not clk after PERIOD/2;
+
+    tbSIPO: subSIPO
+        port map (
+            subSIPO_input_data     => subSIPO_input_data,
+            subSIPO_input_ready    => subSIPO_input_ready,
+            clk                    => clk,
+            reset                  => reset,
+            DoneShifting           => DoneShifting,
+            subSIPO_output_data    => subSIPO_output_data,
+            subSIPO_output_valid   => subSIPO_output_valid
+        );
+
+    process
+        variable tb_test: boolean;
+    begin
+        reset <= '1';
+        subSIPO_input_data <= '0';
+        wait for (PERIOD);
+        reset <= '0';
+        subSIPO_input_ready <= '1';
+        for i in 0 to 191 loop
+            wait until falling_edge(clk);
+            subSIPO_input_data <= ROM_input(i);
+            if (DoneShifting = '1') then
+					 tb_test := (subSIPO_output_data(i) = ROM_input(i)) and (subSIPO_output_valid = '1');
+            else
+					tb_test := true;  -- initialize to true
+					for i in subSIPO_output_data'range loop
+						 tb_test := tb_test and (subSIPO_output_data(i) = '0');
+					end loop;
+					tb_test := tb_test and (subSIPO_output_valid = '0');
+            end if;
+        end loop;
+
+        wait;
+    end process;
+
+end subSIPO_tb_rtl;
