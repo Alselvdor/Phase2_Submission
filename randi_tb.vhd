@@ -21,9 +21,8 @@ architecture randi_tb_rtl of randi_tb is
 
 
             randi_output_data   : OUT std_logic;
-            randi_output_valid  : OUT std_logic
-    --        randi_output_ready  : OUT std_logic
-
+            randi_output_valid  : OUT std_logic;
+            randi_output_ready  : OUT std_logic
         );
     end component;
 
@@ -54,8 +53,8 @@ begin
         randi_input_valid      => randi_input_valid,  
         randi_input_ready      => randi_input_ready,  
         randi_output_valid     => randi_output_valid,          
-        randi_output_data      => randi_output_data
-   --     randi_output_ready     => randi_output_ready
+        randi_output_data      => randi_output_data,
+        randi_output_ready     => randi_output_ready
         );
 
     --clock process 
@@ -65,27 +64,33 @@ begin
     process begin 
         reset <= '1'; --initialize values 
         randi_input_valid    <= '0';
+        randi_input_ready    <= '0';
         wait for CLK_50MHz_Period_HALF + 5 ns;     --make sure a pos edge came before changing the reset 
         reset <= '0'; 
         load <= '1';    --take seed into module 
         wait for CLK_50MHz_Period; --bec of 75 ns edge the next pos edge so make sure a pos edge came 
         load <= '0'; 
         randi_input_valid <= '1'; 
-                -- wait until randi_input_ready = '1';
+        randi_input_ready <= '1';
+        -- wait until randi_input_ready = '1';
 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
         report procedure_Break_Notice;
 
         report procedure_Break_Notice;
-        report "------------------------------ Inputting {1} Input Streams --------------------------------" severity note;
+        report "------------------------------ Inputting {2} Input Streams --------------------------------" severity note;
         report procedure_Break_Notice;
         report "---------------------------- ### Starting Inputting the First stream: " severity note;
         report procedure_Break_Notice;
         procedure_96_inputs(0, 95, input_vector, randi_input_data);  --definition in package  
         report "----------------------------- ### Done Inputting the First stream: " severity note;
         report procedure_Break_Notice;
-        report "------------------------------ Finishehd Inputting {1} Input Streams --------------------------" severity note;
+        report "---------------------------- ### Starting Inputting the Second stream: " severity note;
+        report procedure_Break_Notice;
+        procedure_96_inputs(0, 95, input_vector, randi_input_data);  --definition in package  
+        report "----------------------------- ### Done Inputting the Second stream: " severity note;
+        report "------------------------------ Finishehd Inputting {2} Input Streams --------------------------" severity note;
         report procedure_Break_Notice;
         randi_input_valid  <= '0';
         wait; --makes process executes once 
@@ -111,6 +116,14 @@ begin
                 report "------------------------- ### Randomizer First Input Stream test passed successfully" severity note ;
             assert test_pass_RANDI = true 
                 report "------------------------- ### Randomizer First Input Stream test Failed" severity note ;
+        report procedure_Break_Notice;
+        report "---------------------------------- ### The Second Randimoizer Input Stream  " severity note;
+        procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, randi_output_data, RANDI_Output_Expected, test_pass_RANDI);
+        report procedure_Break_Notice;
+            assert test_pass_RANDI = false 
+                report "------------------------- ### Randomizer Second Input Stream test passed successfully" severity note ;
+            assert test_pass_RANDI = true 
+                report "------------------------- ### Randomizer Second Input Stream test Failed" severity note ;
         report procedure_Break_Notice;
         report "========================================================================================================";
         report "-------------------Finished self checker for: RANDI Block--------------------------";

@@ -8,12 +8,15 @@ entity TopWiMax is
     port(
         CLK_50Mhz                            	  : in    std_logic; 
         reset                 	                  : in    std_logic; 
+        load               	                      : in    std_logic; 
 
         TopWiMax_in_valid                 	      : in    std_logic; 
-        load               	                      : in    std_logic; 
+        TopWiMax_in_ready                	      : in    std_logic; 
         WiInput                               	  : in    std_logic; 
         
         TopWiMax_out_valid                        : out   std_logic;
+        TopWiMax_out_ready                        : out   std_logic;
+
         WiOutput1                              	  : out   std_logic_vector(15 downto 0); 
         WiOutput2                              	  : out   std_logic_vector(15 downto 0) 
     );
@@ -45,8 +48,8 @@ architecture TopWiMax_RTL of TopWiMax is
             randi_input_ready    : IN  std_logic;
 
             randi_output_data   : OUT std_logic;
-            randi_output_valid  : OUT std_logic
-        --    randi_output_ready  : OUT std_logic
+            randi_output_valid  : OUT std_logic;
+            randi_output_ready  : OUT std_logic
         );                   
     end component;
 
@@ -63,7 +66,7 @@ architecture TopWiMax_RTL of TopWiMax is
 
         FEC_output_data           : out   std_logic;
         FEC_output_valid          : out   std_logic;
-        FEC_output_ready          : IN    std_logic
+        FEC_output_ready          : out    std_logic
 
     );
     end component;
@@ -91,7 +94,7 @@ architecture TopWiMax_RTL of TopWiMax is
 
                 MODU_input_data       :IN  std_logic; 
                 MODU_input_valid      :IN  std_logic;
-            --    MODU_input_ready      :IN  std_logic;
+                MODU_input_ready      :IN  std_logic;
 
 
                 MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
@@ -151,8 +154,8 @@ begin
         randi_input_ready      => FEC2Randi_Ready , 
 
         randi_output_valid     => RANDI_out_valid,          
-        randi_output_data      => RANDI_out
-       -- randi_output_ready     => randi_output_ready
+        randi_output_data      => RANDI_out,
+        randi_output_ready     => TopWiMax_out_ready
 
     );
 
@@ -173,7 +176,7 @@ begin
 
     );
 
-    int1: INTER port map 
+    inter1: INTER port map 
     (
         clk_100mhz => clk_100mhz_sig,
         reset => locked2, 
@@ -187,7 +190,7 @@ begin
         INTER_Output_ready => INTER2FEC_Ready                    
     );
 
-    mod1: MODU port map 
+    modu1: MODU port map 
     (
      
 
@@ -196,15 +199,13 @@ begin
 
         MODU_input_data    => INTER_out,
         MODU_input_valid   => INTER_out_valid,
-        -- MODU_input_ready   => MODU_input_ready,
+        MODU_input_ready   => TopWiMax_in_ready,
 
         MODU_output_Q      => WiOutput1,
         MODU_output_I      => WiOutput2,
 
         MODU_output_valid  => TopWiMax_out_valid,
         MODU_output_ready  => MODU2INTER_Ready
-
-
     );
 
 end TopWiMax_RTL;

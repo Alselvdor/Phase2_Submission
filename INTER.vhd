@@ -17,7 +17,7 @@ entity INTER is
 
         INTER_Output_data                       : out   std_logic;
         INTER_Output_valid                      : out   std_logic;
-        INTER_Output_ready                     : out   std_logic  
+        INTER_Output_ready                      : out   std_logic  
     );
 end INTER;
 
@@ -90,6 +90,8 @@ begin
     data_a(0)   <= INTER_Input_data;
     wren_a      <= INTER_input_valid; 
     INTER_Output_data    <= q_b(0);
+    INTER_Output_ready      <= '0' when (INTER_input_ready = '0') else '1';
+
 
     --continous 
     mk_pos  <= ( (12 * to_integer(counter_kmod16)) + (to_integer(counter) / 16) ) when (PingPong_flag = '0') else
@@ -142,7 +144,7 @@ begin
                         counter_out             <= counter_out + 1;
                         state_reg               <= PingPong_state;
                         INTER_Output_valid   <= '1';
-                        if (counter < Inter_Buffer-1) then
+                        if (counter < Inter_Buffer-1 and INTER_input_ready = '1') then
                             counter_kmod16          <= counter_kmod16 + 1;
                             counter                 <= counter + 1;
                         end if;

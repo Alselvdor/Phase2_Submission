@@ -18,7 +18,7 @@ entity FEC is
 
         FEC_output_data           : out   std_logic;
         FEC_output_valid          : out   std_logic;
-        FEC_output_ready          : IN  std_logic
+        FEC_output_ready          : out  std_logic
 
     );
 end FEC;
@@ -35,6 +35,9 @@ architecture FEC_rtl of FEC is
 	signal   finished_tail_flag          	  	: std_logic;
     signal   FEC_encoder_out_valid              : std_logic; 
     signal   PingPong_flag          	  	    : std_logic;
+
+    --signal FEC_Recieveing_Ready             : std_logic;
+    --signal INTER_Recieveing_Ready             : std_logic;
 
     --state machines 
     type input_state_type is (idle, input_buffer, PingPong_state);   -- first input buffer 
@@ -71,6 +74,10 @@ architecture FEC_rtl of FEC is
 
 begin
 
+    -- INTER_Recieveing_Ready         <= FEC_input_ready; 
+    -- FEC_output_ready           <= FEC_input_ready;
+
+    
     --ram instant 
     ram1: FEC_RAM_2PORTS port map
         (
@@ -100,7 +107,8 @@ begin
                  '0'; 
 
     FEC_encoder_out_valid	<= '1' when (input_state_reg = PingPong_state) else '0';	
-    
+    FEC_output_ready      <= '0' when (FEC_input_ready = '0') else '1';
+
                                              
     -----------------------------------------------------------------------------input state machine 1 -----------------------------------------------------------------------------
     process (reset, clk_50mhz) begin 
@@ -220,7 +228,7 @@ begin
                     else 
                         output_state_reg		<= y;					
 					end if;
-					if (counter_shift_and_output < BUFFER_SIZE2 and FEC_encoder_out_valid = '1') then 		  										
+					if (counter_shift_and_output < BUFFER_SIZE2 and FEC_encoder_out_valid = '1' and FEC_input_ready = '1') then 		  										
                         output_state_reg		<= x;
                     else 
                         output_state_reg		<= y;

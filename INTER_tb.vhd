@@ -65,6 +65,7 @@ begin
         wait for CLK_100MHz_Period + 5 ns; 
         reset   <= '0';
         INTER_input_valid      <= '1';
+        INTER_input_ready      <= '1';
 
 
         report procedure_Break_Notice;
@@ -74,19 +75,19 @@ begin
         report "------------------------------    Inputting {4} Input Streams --------------------------------" severity note;
         report "========================================================================================================";        
         report procedure_Break_Notice;
-        report "---------------------------------- ### The First FEC Input Stream  " severity note;
+        report "---------------------------------- ### The First INTER Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
         report "----------------------------- ### Done Inputting the First stream: " severity note;
         report procedure_Break_Notice;
-        report "---------------------------------- ### The Second FEC Input Stream  " severity note;
+        report "---------------------------------- ### The Second INTER Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
         report "----------------------------- ### Done Inputting the Second stream: " severity note;
         report procedure_Break_Notice;
-        report "---------------------------------- ### The Third FEC Input Stream  " severity note;
+        report "---------------------------------- ### The Third INTER Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
         report "----------------------------- ### Done Inputting the Third stream: " severity note;
         report procedure_Break_Notice;
-        report "---------------------------------- ### The Fourth FEC Input Stream  " severity note;
+        report "---------------------------------- ### The Fourth INTER Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
         report "----------------------------- ### Done Inputting the Fourth stream: " severity note;
         report procedure_Break_Notice;

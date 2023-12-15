@@ -14,8 +14,7 @@ architecture MODU_tb_rtl of MODU_tb is
 
             MODU_input_data       :IN  std_logic; 
             MODU_input_valid      :IN  std_logic;
-   --         MODU_input_ready      :IN  std_logic;
-
+            MODU_input_ready      :IN  std_logic;
 
             MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
             MODU_output_I         :OUT std_logic_vector(15 DOWNTO 0);
@@ -38,6 +37,7 @@ architecture MODU_tb_rtl of MODU_tb is
     signal MODU_output_valid      : std_logic;
     signal MODU_output_ready      : std_logic;
 
+
     signal flag                   : std_logic := '0';
 
     signal MODU_Expected_Output_Q : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_Q;
@@ -52,7 +52,7 @@ begin
         reset              => reset,
         MODU_input_data    => MODU_input_data,
         MODU_input_valid   => MODU_input_valid,
-     --   MODU_input_ready   => MODU_input_ready,
+        MODU_input_ready   => MODU_input_ready,
 
 
         MODU_output_Q      => MODU_output_Q,
@@ -70,27 +70,28 @@ begin
         wait for CLK_100MHz_Period + 5 ns;
         reset              <= '0';
         MODU_input_valid   <= '1';
+        MODU_input_ready   <= '1';
 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
 
         report "========================================================================================================";               report "========================================================================================================";         
-        report "------------------------------    Inputting {2} Input Streams --------------------------------" severity note;
+        report "------------------------------    Inputting MODU {2} Input Streams --------------------------------" severity note;
         report "========================================================================================================";        
         report procedure_Break_Notice;
-        report "---------------------------------- ### The First FEC Input Stream  " severity note;
+        report "---------------------------------- ### The First MODU Input Stream  " severity note;
         procedure_192_inputs_MODU(0, 191, test_in_vector, MODU_input_data);
-        report "----------------------------- ### Done Inputting the First stream: " severity note;
+        report "----------------------------- ### Done Inputting MODU the First stream: " severity note;
         report procedure_Break_Notice;
-        report "---------------------------------- ### The Second FEC Input Stream  " severity note;
+        report "---------------------------------- ### The Second MODU Input Stream  " severity note;
         procedure_192_inputs_MODU(0, 191, test_in_vector, MODU_input_data);
-        report "----------------------------- ### Done Inputting the Second stream: " severity note;
+        report "----------------------------- ### Done Inputting MODU the Second stream: " severity note;
 
         -- procedure_192_inputs_MODU(0, 191, test_in_vector, MODU_input_data);
         -- procedure_192_inputs_MODU(0, 191, test_in_vector, MODU_input_data);
         -- procedure_192_inputs_MODU(0, 191, test_in_vector, MODU_input_data);
 
-        report "------------------------------ Finishehd Inputting {2} Input Streams --------------------------" severity note;
+        report "------------------------------ Finishehd Inputting MODU {2} Input Streams --------------------------" severity note;
         report procedure_Break_Notice;
 
 
@@ -110,11 +111,15 @@ begin
     test_pass_MODU_encoder_I <= true;  -- Reset the test flag for MODU I outputs
 
 
-
-    report "----------------------------- Checking (Demodulating) (2) output streams ---------------" severity note;
+    report "========================================================================================================";               
+    report "---------------------------- Started self checker for: MODU Block --------------------------------";
+    report "========================================================================================================";            
+    report "----------------------------- Checking MODU (Demodulating) (2) output streams ---------------" severity note;
     report procedure_Break_Notice;
     report "------------------------ ### Started Checking First MODU Output stream: " severity note;
-    procedure_192_outputs_MODU(0, 1535, test_out_vector_Q, MODU_output_Q, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q);
+    --procedure_192_outputs_MODU(0, 1535, test_out_vector_Q, MODU_output_Q, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q);
+    procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q, MODU_output_Q, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I, MODU_output_I, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
+
     assert test_pass_MODU_encoder_Q = false 
         report "------------------------ ### First MODU Output Stream: 1536 Q Values Successed" severity note;
     assert test_pass_MODU_encoder_Q = true 
@@ -129,12 +134,11 @@ begin
     report procedure_Break_Notice;
 
     report "-------------------------- ### Started Checking MODU Second Output stream: " severity note;
-    procedure_192_outputs_MODU(0, 1535, test_out_vector_Q, MODU_output_Q, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q);    assert test_pass_MODU_encoder_Q = false 
+    procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q, MODU_output_Q, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I, MODU_output_I, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
+    assert test_pass_MODU_encoder_Q = false 
         report "------------------------ ### Second MODU Output Stream: 1536 Q Values Successed" severity note;
     assert test_pass_MODU_encoder_Q = true 
         report "------------------------ ### Second MODU Output Stream: 1536 Q Values Failed" severity note;
-    
-
         report procedure_Break_Notice;
     assert test_pass_MODU_encoder_I = false 
         report "------------------------ ### Second MODU Output Stream: 1536 I Values Successed" severity note;
@@ -143,7 +147,7 @@ begin
     report procedure_Break_Notice;
     report "--------------------------- ### Ended Checking MODU Second Output stream " severity note;
     report procedure_Break_Notice;
-    report "----------------------------- Ended Checking (Demodulating) (2) output streams ---------------" severity note;
+    report "----------------------------- Ended MODU Checking (Demodulating) (2) output streams ---------------" severity note;
     report procedure_Break_Notice;
 
 

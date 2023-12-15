@@ -13,36 +13,57 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     port(
         CLK_50Mhz                            	  : in    std_logic; 
         reset                 	                  : in    std_logic; 
+        load               	                      : in    std_logic; 
 
         TopWiMax_in_valid                 	      : in    std_logic; 
-        load               	                      : in    std_logic; 
+        TopWiMax_in_ready                	      : in    std_logic; 
         WiInput                               	  : in    std_logic; 
         
         TopWiMax_out_valid                        : out   std_logic;
+        TopWiMax_out_ready                        : out   std_logic;
+
         WiOutput1                              	  : out   std_logic_vector(15 downto 0); 
         WiOutput2                              	  : out   std_logic_vector(15 downto 0) 
     );
+
     end component;
 
     
     signal   clk_50                               : std_logic := '0'; 
     signal   reset                                : std_logic; 
-    signal   TopWiMax_in_valid                                   : std_logic; 
+    signal   TopWiMax_in_valid                    : std_logic; 
+    signal   TopWiMax_in_ready                    : std_logic; 
+
     signal   load                                 : std_logic; 
     signal   test_in_vector                       : std_logic_vector(95 downto 0) := RANDI_VECTOR_INPUT;
     -- signal   demodulation_vector                  : std_logic_vector(191 downto 0) := (others => '0');
-    signal   test_in_bit                          : std_logic;
+    signal   WiInput                              : std_logic;
     signal   test_out1_bit                        : std_logic_vector(15 downto 0) ;
     signal   test_out2_bit                        : std_logic_vector(15 downto 0) ;
-    signal   out_valid                            : std_logic;
+    signal   TopWiMax_out_valid                   : std_logic;
+    signal   TopWiMax_out_ready                   : std_logic;
+
     
-    --alias signals 
-    signal  rand_out_alias_signal                 : std_logic;
-    signal  rand_valid_alias_signal               : std_logic;
-    signal  fec_out_alias_signal                  : std_logic;
-    signal  fec_valid_alias_signal                : std_logic;
-    signal  int_out_alias_signal                  : std_logic;
-    signal  int_valid_alias_signal                : std_logic;
+    --alias signals Randi
+    signal  signal_alias_RANDI_output_data                 : std_logic;
+    signal  signal_alias_RANDI_output_valid                : std_logic;
+    signal  signal_alias_RANDI_input_valid                 : std_logic;
+    signal  signal_alias_RANDI_output_ready                : std_logic;
+    signal  signal_alias_RANDI_input_ready                 : std_logic;
+
+    --alias signals FEC
+    signal  signal_alias_fec_output_data                  : std_logic;
+    signal  signal_alias_fec_output_valid                 : std_logic;
+    signal  signal_alias_fec_input_valid                  : std_logic;
+    signal  signal_alias_fec_output_ready                 : std_logic;
+    signal  signal_alias_fec_input_ready                  : std_logic;
+
+    --alias signals INTER
+    signal  signal_alias_INTER_Output_data                  : std_logic;
+    signal  signal_alias_INTER_Output_valid                 : std_logic;
+    signal  signal_alias_INTER_input_valid                  : std_logic;
+    signal  signal_alias_INTER_Output_ready                 : std_logic;
+    signal  signal_alias_INTER_input_ready                  : std_logic;
     
     -- Randi Self Checker Signals
     signal RANDI_Output_Expected                        : std_logic_vector(95 downto 0) := RANDI_VECTOR_OUTPUT;
@@ -80,11 +101,13 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     twimax : TopWiMax port map 
     (
         CLK_50Mhz             => clk_50,
-        reset                 => reset,            
+        reset                 => reset,   
+        load                  => load,    	         
         TopWiMax_in_valid     => TopWiMax_in_valid,    
-        load                  => load,    	   
-        WiInput               => test_in_bit,        
-        TopWiMax_out_valid    => out_valid,       
+        TopWiMax_in_ready     => TopWiMax_in_ready, 
+        WiInput               => WiInput    ,        
+        TopWiMax_out_valid    => TopWiMax_out_valid,    
+        TopWiMax_out_ready    => TopWiMax_out_ready,     
         WiOutput1             => test_out1_bit,           
         WiOutput2             => test_out2_bit         
     );
@@ -96,6 +119,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     process begin 
         reset <= '1'; --initialize values 
         TopWiMax_in_valid    <= '0';
+        TopWiMax_in_ready    <= '0';
         wait for 3*CLK_50MHz_Period_HALF;     --make sure a pos edge came before changing the reset 
         reset <= '0'; 
         wait for 2*CLK_50MHz_Period_HALF;
@@ -103,6 +127,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         wait for 1.5*CLK_50MHz_Period; --bec of 75 ns edge the next pos edge so make sure a pos edge came 
         load <= '0'; 
         TopWiMax_in_valid <= '1'; 
+        TopWiMax_in_ready <= '1';
         --Inputting steams 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
@@ -113,20 +138,20 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         report procedure_Break_Notice;
         report "---------------------------- ### Starting Inputting the First stream: " severity note;
         report procedure_Break_Notice;
-        procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
+        procedure_96_inputs(0, 95, test_in_vector, WiInput    );
         report "----------------------------- ### Done Inputting the First stream: " severity note;
         report procedure_Break_Notice;
         report "----------------------------- ## Starting Inputting the Second stream: " severity note;
         report procedure_Break_Notice;
-        procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
+        procedure_96_inputs(0, 95, test_in_vector, WiInput    );
         report "----------------------------- ## Done Inputting the Second stream: " severity note;
         report procedure_Break_Notice;
         report "------------------------------ Finishehd Inputting {2} Input Streams --------------------------" severity note;
         report procedure_Break_Notice;
-      --  procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
-       -- procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
-      --  procedure_96_inputs(0, 95, test_in_vector, test_in_bit);     
-        test_in_bit <= '0';   
+      --  procedure_96_inputs(0, 95, test_in_vector, WiInput    );
+       -- procedure_96_inputs(0, 95, test_in_vector, WiInput    );
+      --  procedure_96_inputs(0, 95, test_in_vector, WiInput    );     
+        WiInput     <= '0';   
         TopWiMax_in_valid  <= '0';
         wait; --makes process executes once 
     end process;
@@ -158,7 +183,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     --         end loop;
     --     end demodulation_procedure;
     begin         
-        wait until out_valid = '1'; 
+        wait until TopWiMax_out_valid = '1'; 
         wait for 2 ns; 
 
         report "========================================================================================================";
@@ -237,7 +262,6 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         report procedure_Break_Notice;
         report END_SIMULATION_Notice severity note;
         report procedure_Break_Notice;
-
         wait;
     end process;
 
@@ -247,7 +271,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     process 
     begin 
         wait for 1 ns;
-        wait until rand_valid_alias_signal = '1'; 
+        wait until signal_alias_RANDI_output_valid = '1'; 
         wait for 5 ns;
         report "========================================================================================================";
         report "------------------------------------- STARTED Blocks SELF CHECKER --------------------------------------";
@@ -255,7 +279,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         report "---------------------------- Started self checker for: Randomizer Block --------------------------------";
         report "========================================================================================================";        
         report "---------------------------------- ### The First Randimoizer Input Stream  " severity note;
-            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, rand_out_alias_signal, RANDI_Output_Expected, test_pass_RANDI);
+            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, signal_alias_RANDI_output_data, RANDI_Output_Expected, test_pass_RANDI);
             report procedure_Break_Notice;
             assert test_pass_RANDI = false 
                 report "------------------------- ### Randomizer First Input Stream test passed successfully" severity note ;
@@ -264,7 +288,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
             
             report procedure_Break_Notice;
             report "---------------------------------- ## The Second Randimoizer Input Stream  " severity note;
-            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, rand_out_alias_signal, RANDI_Output_Expected, test_pass_RANDI);
+            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, signal_alias_RANDI_output_data, RANDI_Output_Expected, test_pass_RANDI);
             report procedure_Break_Notice;
             assert test_pass_RANDI = false 
                 report "------------------------- ## Randomizer Second Input Stream test passed successfully" severity note ;
@@ -310,14 +334,14 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     process 
         begin 
          wait for 1 ns;
-         wait until fec_valid_alias_signal = '1'; 
+         wait until signal_alias_fec_output_valid = '1'; 
          wait for 5 ns;
 
          report "========================================================================================================";               
          report "---------------------------- Started self checker for: FEC Block --------------------------------";
          report "========================================================================================================";        
          report "---------------------------------- ### The First FEC Input Stream  " severity note;
-            procedure_192_outputs_FEC(0, 191, FEC_Output_Vector, fec_out_alias_signal, FEC_Expected_Output, test_pass_fec_encoder);
+            procedure_192_outputs_FEC(0, 191, FEC_Output_Vector, signal_alias_fec_output_data, FEC_Expected_Output, test_pass_fec_encoder);
              report procedure_Break_Notice;
              assert test_pass_fec_encoder = false 
                  report "------------------------- ### FEC First Input Stream test passed Successfully" severity note ;
@@ -326,7 +350,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
              
              report procedure_Break_Notice;
              report "---------------------------------- ## The Second FEC Input Stream  " severity note;
-             procedure_192_outputs_FEC(0, 191, FEC_Output_Vector, fec_out_alias_signal, FEC_Expected_Output, test_pass_fec_encoder);
+             procedure_192_outputs_FEC(0, 191, FEC_Output_Vector, signal_alias_fec_output_data, FEC_Expected_Output, test_pass_fec_encoder);
              report procedure_Break_Notice;
              assert test_pass_fec_encoder = false 
                  report "------------------------- ## FEC Second Input Stream test passed Successfully" severity note ;
@@ -375,14 +399,14 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
 
     begin 
         wait for 1 ns;
-        wait until int_valid_alias_signal = '1'; 
+        wait until signal_alias_INTER_Output_valid = '1'; 
         wait for 5 ns;
 
         report "========================================================================================================";               
         report "---------------------------- Started self checker for: INTER Block --------------------------------";
         report "========================================================================================================";        
         report "---------------------------------- ### The First INTER Input Stream  " severity note;
-            procedure_192_outputs_INTER(0, 191, INTER_Output_Vector, int_out_alias_signal, INTER_Expected_Output, test_pass_INTER_encoder);
+            procedure_192_outputs_INTER(0, 191, INTER_Output_Vector, signal_alias_INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
             report procedure_Break_Notice;
             assert test_pass_INTER_encoder = false 
                 report "------------------------- ### INTER First Input Stream test passed Successfully" severity note ;
@@ -391,7 +415,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
             
             report procedure_Break_Notice;
             report "---------------------------------- ## The Second INTER Input Stream  " severity note;
-            procedure_192_outputs_INTER(0, 191, INTER_Output_Vector, int_out_alias_signal, INTER_Expected_Output, test_pass_INTER_encoder);
+            procedure_192_outputs_INTER(0, 191, INTER_Output_Vector, signal_alias_INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
             report procedure_Break_Notice;
             assert test_pass_INTER_encoder = false 
                 report "------------------------- ## INTER Second Input Stream test passed Successfully" severity note ;
@@ -435,17 +459,34 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     end process;
 
         -- Alias assignments 
-        -- alias rand_out_alias_signal   is TopWiMax_tb.twimax.RANDI.RANDI_out;
-        -- alias rand_valid_alias_signal is TopWiMax_tb.twimax.RANDI.RANDI_out_valid;
-        -- alias fec_out_alias_signal    is TopWiMax_tb.twimax.fec_out;
-        -- alias fec_valid_alias_signal  is TopWiMax_tb.twimax.FEC_encoder_out_valid_out;
-        -- alias int_out_alias_signal    is TopWiMax_tb.twimax.INTER_out;
-        -- alias int_valid_alias_signal  is TopWiMax_tb.twimax.INTER_out_valid;   
-        rand_out_alias_signal   <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_data    : std_logic >>; 
-        rand_valid_alias_signal <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_valid   : std_logic >>; 
-        fec_out_alias_signal    <=  <<signal .topwimax_tb.twimax.fec1.fec_output_data        : std_logic >>;  
-        fec_valid_alias_signal  <=  <<signal .topwimax_tb.twimax.fec1.fec_output_valid       : std_logic >>;
-        int_out_alias_signal    <=  <<signal .topwimax_tb.twimax.int1.INTER_Output_data      : std_logic >>; 
-        int_valid_alias_signal  <=  <<signal .topwimax_tb.twimax.int1.INTER_Output_valid     : std_logic >>;
+        -- alias signal_alias_RANDI_output_data   is TopWiMax_tb.twimax.RANDI.RANDI_out;
+        -- alias signal_alias_RANDI_output_valid is TopWiMax_tb.twimax.RANDI.RANDI_out_valid;
+        -- alias signal_alias_fec_output_data    is TopWiMax_tb.twimax.fec_out;
+        -- alias signal_alias_fec_output_valid  is TopWiMax_tb.twimax.FEC_encoder_out_valid_out;
+        -- alias signal_alias_INTER_Output_data    is TopWiMax_tb.twimax.INTER_out;
+        -- alias signal_alias_INTER_Output_valid  is TopWiMax_tb.twimax.INTER_out_valid; 
+        
+        
+
+        --alias signals RADNI
+        signal_alias_RANDI_output_data     <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_data       : std_logic >>; 
+        signal_alias_RANDI_output_valid    <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_valid       : std_logic >>; 
+        signal_alias_RANDI_input_valid     <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_input_valid       : std_logic >>; 
+        signal_alias_RANDI_output_ready    <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_ready       : std_logic >>; 
+        signal_alias_RANDI_input_ready     <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_input_ready       : std_logic >>; 
+
+        --alias signals FEC
+        signal_alias_fec_output_data      <=  <<signal .topwimax_tb.twimax.fec1.fec_output_data            : std_logic >>;  
+        signal_alias_fec_output_valid     <=  <<signal .topwimax_tb.twimax.fec1.fec_output_valid            : std_logic >>;
+        signal_alias_fec_input_valid      <=  <<signal .topwimax_tb.twimax.fec1.fec_input_valid            : std_logic >>;
+        signal_alias_fec_output_ready     <=  <<signal .topwimax_tb.twimax.fec1.fec_output_ready            : std_logic >>;
+        signal_alias_fec_input_ready      <=  <<signal .topwimax_tb.twimax.fec1.fec_input_ready            : std_logic >>;
+
+        --alias signals INTER
+        signal_alias_INTER_Output_data    <=  <<signal .topwimax_tb.twimax.inter1.INTER_Output_data      : std_logic >>; 
+        signal_alias_INTER_Output_valid   <=  <<signal .topwimax_tb.twimax.inter1.INTER_Output_valid       : std_logic >>;
+        signal_alias_INTER_input_valid    <=  <<signal .topwimax_tb.twimax.inter1.INTER_input_valid       : std_logic >>;
+        signal_alias_INTER_Output_ready   <=  <<signal .topwimax_tb.twimax.inter1.INTER_Output_ready       : std_logic >>;
+        signal_alias_INTER_input_ready    <=  <<signal .topwimax_tb.twimax.inter1.INTER_input_ready       : std_logic >>;
 
 end TopWiMax_tb_rtl;

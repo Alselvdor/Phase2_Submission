@@ -12,7 +12,7 @@ entity MODU is
 
             MODU_input_data       :IN  std_logic; 
             MODU_input_valid      :IN  std_logic;
-       --     MODU_input_ready      :IN  std_logic;
+            MODU_input_ready      :IN  std_logic;
 
 
             MODU_output_Q         :OUT std_logic_vector(15 DOWNTO 0);
@@ -35,6 +35,10 @@ architecture MODU_rtl of MODU is
     constant NZeroTS     : std_logic_vector(15 downto 0) := x"a581";
     
 begin
+
+    MODU_output_ready      <= '0' when (MODU_input_ready = '0') else '1';
+
+
     MODU_input_data_fuse    <= MODU_input_data & MODU_input_data_buffer when (flag = '1') else "00"; 
     process (clk_100MHz, reset) begin 
         if (reset = '1') then
@@ -61,7 +65,7 @@ begin
             MODU_output_valid    <= '0'; 
         elsif(rising_edge(clk_100MHz)) then 
             if (MODU_input_valid = '1') then 
-                if (flag = '1') then 
+                if (flag = '1' and MODU_input_ready = '1') then 
                     case (MODU_input_data_fuse) is 
                         when "00" => 
                             MODU_output_Q                 <= ZeroTS; 

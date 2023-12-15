@@ -23,7 +23,7 @@ architecture FEC_tb_rtl of FEC_tb is
 
         FEC_output_data           : out   std_logic;
         FEC_output_valid          : out   std_logic;
-        FEC_output_ready          : IN  std_logic
+        FEC_output_ready          : out  std_logic
 
     );
     end component;
@@ -63,6 +63,7 @@ begin
         wait for CLK_50MHz_Period + 10 ns; 
         reset   <= '0';
         FEC_input_valid      <= '1';
+        FEC_input_ready      <= '1';
 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
@@ -131,7 +132,7 @@ begin
         wait until FEC_output_valid = '1';
         wait for 2 ns;
 
-
+        
         report "========================================================================================================";          
         report "---------------------------- Started self checker for: FEC Block --------------------------------";
         report "========================================================================================================";        
