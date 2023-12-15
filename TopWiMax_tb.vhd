@@ -30,7 +30,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     signal   TopWiMax_in_valid                                   : std_logic; 
     signal   load                                 : std_logic; 
     signal   test_in_vector                       : std_logic_vector(95 downto 0) := RANDI_VECTOR_INPUT;
-    signal   demodulation_vector                  : std_logic_vector(191 downto 0) := (others => '0');
+    -- signal   demodulation_vector                  : std_logic_vector(191 downto 0) := (others => '0');
     signal   test_in_bit                          : std_logic;
     signal   test_out1_bit                        : std_logic_vector(15 downto 0) ;
     signal   test_out2_bit                        : std_logic_vector(15 downto 0) ;
@@ -47,13 +47,15 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     
     signal test_out_vector_Q      : std_logic_vector(1535 downto 0) := (others => '0');
     signal test_out_vector_I      : std_logic_vector(1535 downto 0) := (others => '0');
+    signal test_out_vector_Q1      : std_logic_vector(1535 downto 0) := (others => '0');
+    signal test_out_vector_I1      : std_logic_vector(1535 downto 0) := (others => '0');
     signal MODU_Expected_Output_Q : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_Q;
     signal MODU_Expected_Output_I : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_I;
     signal test_pass_MODU_encoder_I                : boolean := true;
     signal test_pass_MODU_encoder_Q                : boolean := true;
 
     begin 
-    
+
     --instantiations 
     twimax : TopWiMax port map 
     (
@@ -129,13 +131,9 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         report "Starting Demodulation of modulated output 1 stream: " severity note;
         procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q, test_out1_bit, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I, test_out2_bit, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
 
-        -- report "Demodulation finished. " severity note;
-        -- assert demodulation_vector /= MODU_VECTOR_INPUT
-        --     report "Demodulated vector is equal to the input one, test succeeded on stream 1" severity note; 
-        --     assert demodulation_vector = MODU_VECTOR_INPUT
-        --         report "Demodulated vector is not equal to input 1 stream vector, test failed" severity error;
-                
-        -- report "Starting Demodulation of modulated output 2 stream: " severity note;
+        report "Starting Demodulation of modulated output 2 stream: " severity note;
+        procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q1, test_out1_bit, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I1, test_out2_bit, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
+
         -- demodulation_procedure;
         -- report "Demodulation finished. " severity note;
         -- assert demodulation_vector /= MODU_VECTOR_INPUT
@@ -347,13 +345,12 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         -- alias int_out_alias_signal    is TopWiMax_tb.twimax.INTER_out;
         -- alias int_valid_alias_signal  is TopWiMax_tb.twimax.INTER_out_valid;
 
-            --    rand_out_alias_signal   <=  <<signal twimax.RANDI.RANDI_out            : std_logic >>; 
-            --    rand_valid_alias_signal <=  <<signal twimax.RANDI.RANDI_out_valid      : std_logic >>; 
-            --    fec_out_alias_signal    <=  <<signal twimax.fec_out                   : std_logic >>;  
-            --    fec_valid_alias_signal  <=  <<signal twimax.FEC_encoder_out_valid_out : std_logic >>;
-            --    int_out_alias_signal    <=  <<signal twimax.INTER_out           : std_logic >>; 
-            --    int_valid_alias_signal  <=  <<signal twimax.INTER_out_valid     : std_logic>>;
-       
-       
+         
+        rand_out_alias_signal   <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_data    : std_logic >>; 
+        rand_valid_alias_signal <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_valid   : std_logic >>; 
+        fec_out_alias_signal    <=  <<signal .topwimax_tb.twimax.fec1.fec_output_data        : std_logic >>;  
+        fec_valid_alias_signal  <=  <<signal .topwimax_tb.twimax.fec1.fec_output_valid       : std_logic >>;
+        int_out_alias_signal    <=  <<signal .topwimax_tb.twimax.int1.INTER_Output_data      : std_logic >>; 
+        int_valid_alias_signal  <=  <<signal .topwimax_tb.twimax.int1.INTER_Output_valid     : std_logic >>;
 
 end TopWiMax_tb_rtl;
