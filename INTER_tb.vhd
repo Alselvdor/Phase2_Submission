@@ -40,7 +40,6 @@ architecture INTER_tb_rtl of INTER_tb is
     signal INTER_Output_ready                              : std_logic;
     signal flag                                   : std_logic := '0';
     
-    signal test_pass_INTER_encoder                : boolean := true;
     signal test_out_vector                        : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
     signal INTER_Expected_Output                  : std_logic_vector(191 downto 0) := INTER_VECTOR_OUTPUT;
 
@@ -70,24 +69,33 @@ begin
 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
+
+        report "========================================================================================================";               report "========================================================================================================";         
+        report "------------------------------    Inputting {4} Input Streams --------------------------------" severity note;
+        report "========================================================================================================";        
         report procedure_Break_Notice;
-        report "Starting INTER" severity note; 
-        report procedure_Break_Notice;
-        report "[First Bulk] Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The First FEC Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
+        report "----------------------------- ### Done Inputting the First stream: " severity note;
         report procedure_Break_Notice;
-        report "[Second Bulk] Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Second FEC Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
+        report "----------------------------- ### Done Inputting the Second stream: " severity note;
         report procedure_Break_Notice;
-        report "[Third Bulk] Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Third FEC Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
+        report "----------------------------- ### Done Inputting the Third stream: " severity note;
         report procedure_Break_Notice;
-        report "[Fourth Bulk] Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Fourth FEC Input Stream  " severity note;
         procedure_192_inputs(0, 191, test_in_vector, INTER_Input_data);
+        report "----------------------------- ### Done Inputting the Fourth stream: " severity note;
+        report procedure_Break_Notice;
+
+        
+        report "------------------------------ Finishehd Inputting {4} Input Streams --------------------------" severity note;
+        report procedure_Break_Notice;
+
+        
 
         -- for i in 191 downto 0 loop 
         --     INTER_Input_data <= test_in_vector(i);
@@ -118,28 +126,72 @@ begin
     process begin 
         wait until INTER_Output_valid = '1'; 
         wait for 2 ns; 
-        report procedure_Break_Notice;
-        report "[First Bulk] Output Streaming" severity note; 
-        report procedure_Break_Notice;
+
+        report "========================================================================================================";               
+        report "---------------------------- Started self checker for: INTER Block --------------------------------";
+        report "========================================================================================================";        
+        report "---------------------------------- ### The First INTER Input Stream  " severity note;
         procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
-        report procedure_Break_Notice;
-        report "[Second Bulk] Output Streaming" severity note; 
-        report procedure_Break_Notice;
-        procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
-        report procedure_Break_Notice;
-        report "[Third Bulk] Output Streaming" severity note; 
-        report procedure_Break_Notice;
-        procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
-        report procedure_Break_Notice;
-        report "[Fourth Bulk] Output Streaming" severity note; 
-        report procedure_Break_Notice;
-        procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+            report procedure_Break_Notice;
+            assert test_pass_INTER_encoder = false 
+                report "------------------------- ### INTER First Input Stream test passed Successfully" severity note ;
+            assert test_pass_INTER_encoder = true 
+                report "------------------------- ### INTER First Input Stream test Failed" severity note ;
+            
+            report procedure_Break_Notice;
+            report "---------------------------------- ## The Second INTER Input Stream  " severity note;
+            procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+            report procedure_Break_Notice;
+            assert test_pass_INTER_encoder = false 
+                report "------------------------- ## INTER Second Input Stream test passed Successfully" severity note ;
+            assert test_pass_INTER_encoder = true 
+                report "------------------------- ## INTER Second Input Stream test Failed" severity note ;
+            
+                report "---------------------------------- ### The Third INTER Input Stream  " severity note;
+                procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+                    report procedure_Break_Notice;
+                    assert test_pass_INTER_encoder = false 
+                        report "------------------------- ### INTER Third Input Stream test passed Successfully" severity note ;
+                    assert test_pass_INTER_encoder = true 
+                        report "------------------------- ### INTER Third Input Stream test Failed" severity note ;
+                    
+                    report procedure_Break_Notice;
+                    report "---------------------------------- ## The Fourth INTER Input Stream  " severity note;
+                    procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+                    report procedure_Break_Notice;
+                    assert test_pass_INTER_encoder = false 
+                        report "------------------------- ## INTER Fourth Input Stream test passed Successfully" severity note ;
+                    assert test_pass_INTER_encoder = true 
+                        report "------------------------- ## INTER Fourth Input Stream test Failed" severity note ;
+
+            report "========================================================================================================";
+            report "-------------------Finished self checker for: INTER Block--------------------------";
+            report "========================================================================================================";
+                
+
+        -- report procedure_Break_Notice;
+        -- report "[First Bulk] Output Streaming" severity note; 
+        -- report procedure_Break_Notice;
+        -- procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+        -- report procedure_Break_Notice;
+        -- report "[Second Bulk] Output Streaming" severity note; 
+        -- report procedure_Break_Notice;
+        -- procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+        -- report procedure_Break_Notice;
+        -- report "[Third Bulk] Output Streaming" severity note; 
+        -- report procedure_Break_Notice;
+        -- procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
+        -- report procedure_Break_Notice;
+        -- report "[Fourth Bulk] Output Streaming" severity note; 
+        -- report procedure_Break_Notice;
+        -- procedure_192_outputs_INTER(0, 191, test_out_vector, INTER_Output_data, INTER_Expected_Output, test_pass_INTER_encoder);
 
 
-        assert test_pass_INTER_encoder = false 
-            report procedure_Break_Notice;
-            report "Test on 192 inputs passed successfully!" severity note; 
-            report procedure_Break_Notice;
+        -- assert test_pass_INTER_encoder = false 
+        --     report procedure_Break_Notice;
+        --     report "Test on 192 inputs passed successfully!" severity note; 
+        --     report procedure_Break_Notice;
+
         report procedure_Break_Notice;
         report END_SIMULATION_Notice severity note;
         report procedure_Break_Notice;

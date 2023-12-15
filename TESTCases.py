@@ -1,6 +1,7 @@
 # ==============  RANDI Block
-#    Time: 1965 ns
-#    SIM:  2000 ns
+#    Time:   1965 ns
+#    SIM :   2000 ns
+#    In  :   2    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES
 # [OUTPUT] SELF CHECK DONE     >> YES
@@ -10,6 +11,7 @@
 # ==============   FEC Block
 #    Time: 11552 ns
 #    SIM:  12000 ns
+#    In  :   5    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES
 # [OUTPUT] SELF CHECK DONE     >> YES
@@ -19,6 +21,7 @@
 # ==============   INTER Block
 #    Time: 9617 ns
 #    SIM:  10000 ns
+#    In  :   4    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES
 # [OUTPUT] SELF CHECK DONE     >> YES
@@ -28,6 +31,18 @@
 # ==============   MODU Block
 #    Time: 1956.536 ns  ns
 #    SIM:  2000 ns
+#    In  :   2    Streams
+# [INPUT]  SELF CHECK DONE     >> YES 
+# [INPUT]  SELF CHECK WORKING  >> YES
+# [OUTPUT] SELF CHECK DONE     >> YES
+# [OUTPUT] SELF CHECK WORKING  >> YES 
+# ===================================== #
+
+
+# ==============   TopWiMax
+#    Time: 7775 ns 
+#    SIM:  8000 ns
+#    In  :   2    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES
 # [OUTPUT] SELF CHECK DONE     >> YES

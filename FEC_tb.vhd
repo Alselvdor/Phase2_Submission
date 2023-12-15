@@ -41,9 +41,9 @@ architecture FEC_tb_rtl of FEC_tb is
     signal   FEC_input_ready                      : std_logic; 
     signal   test_in_vector                       : std_logic_vector(95 downto 0) := FEC_VECTOR_INPUT;
     signal   test_out_vector                      : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
-    signal   FEC_Expected_Output                  : std_logic_vector(191 downto 0) := FEC_VECTOR_OUTPUT;
     signal   FEC_input_data                       : std_logic;
     signal   test_pass_fec_encoder                : boolean := true;
+    signal   FEC_Expected_Output                  : std_logic_vector(191 downto 0) := FEC_VECTOR_OUTPUT;
     signal   FEC_output_data                      : std_logic;
     signal   FEC_output_valid                     : std_logic;
     signal   FEC_output_ready                     : std_logic;
@@ -66,31 +66,34 @@ begin
 
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
+        report "========================================================================================================";               report "========================================================================================================";         
+        report "------------------------------    Inputting {5} Input Streams --------------------------------" severity note;
+        report "========================================================================================================";        
+        
         report procedure_Break_Notice;
-        report "Starting FEC" severity note; 
-        report procedure_Break_Notice;
-        --test_in_vector FEC_input_data
-        report "First Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The First FEC Input Stream  " severity note;
         procedure_96_inputs_FEC(0, 95, test_in_vector, FEC_input_data);
+        report "----------------------------- ### Done Inputting the First stream: " severity note;
         report procedure_Break_Notice;
-        report "Second Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Second FEC Input Stream  " severity note;
         procedure_96_inputs_FEC(0, 95, test_in_vector, FEC_input_data);
+        report "----------------------------- ### Done Inputting the Second stream: " severity note;
         report procedure_Break_Notice;
-        report "Third Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Third FEC Input Stream  " severity note;
         procedure_96_inputs_FEC(0, 95, test_in_vector, FEC_input_data);
+        report "----------------------------- ### Done Inputting the Third stream: " severity note;
         report procedure_Break_Notice;
-        report "Fourth Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Fourth FEC Input Stream  " severity note;
         procedure_96_inputs_FEC(0, 95, test_in_vector, FEC_input_data);
+        report "----------------------------- ### Done Inputting the Fourth stream: " severity note;
         report procedure_Break_Notice;
-        report "Fifth Input Streaming" severity note; 
-        report procedure_Break_Notice;
+        report "---------------------------------- ### The Fifth FEC Input Stream  " severity note;
         procedure_96_inputs_FEC(0, 95, test_in_vector, FEC_input_data);
+        report "----------------------------- ### Done Inputting the Fifth stream: " severity note;
         report procedure_Break_Notice;
-        report "Done with Inputs Streaming" severity note; 
+
+
+        report "------------------------------ Finishehd Inputting {5} Input Streams --------------------------" severity note;
         report procedure_Break_Notice;
 
 
@@ -127,30 +130,84 @@ begin
     process begin 
         wait until FEC_output_valid = '1';
         wait for 2 ns;
-     --  test_out_vector FEC_output_data:
-    report "Starting with Output Streaming" severity note; 
-    report procedure_Break_Notice;
-    report "First Output Streaming" severity note; 
-    procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
-    report "Second Output Streaming" severity note; 
-    procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
-    report "Third Output Streaming" severity note; 
-    procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
-    report "Fourth Output Streaming" severity note; 
-    procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
-    report "Fifth Output Streaming" severity note; 
-    procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
-    report "Done with Output Streaming" severity note; 
-    report procedure_Break_Notice;
 
 
-
-        assert test_pass_fec_encoder = false 
+        report "========================================================================================================";          
+        report "---------------------------- Started self checker for: FEC Block --------------------------------";
+        report "========================================================================================================";        
+            report "---------------------------------- ### The First FEC Input Stream  " severity note;
+        procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);           
+         report procedure_Break_Notice;
+            assert test_pass_fec_encoder = false 
+                report "------------------------- ### FEC First Input Stream test passed Successfully" severity note ;
+            assert test_pass_fec_encoder = true 
+                report "------------------------- ### FEC First Input Stream test Failed" severity note ;
+            
             report procedure_Break_Notice;
-            report "Test on 192 inputs passed successfully!" severity note; 
-            report procedure_Break_Notice;
-        report END_SIMULATION_Notice severity note;
+            report "---------------------------------- ## The Second FEC Input Stream  " severity note;
+            procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);         
+               report procedure_Break_Notice;
+            assert test_pass_fec_encoder = false 
+                report "------------------------- ## FEC Second Input Stream test passed Successfully" severity note ;
+            assert test_pass_fec_encoder = true 
+                report "------------------------- ## FEC Second Input Stream test Failed" severity note ;
+            
+                report "---------------------------------- ### The Third FEC Input Stream  " severity note;
+        procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);          
+          report procedure_Break_Notice;
+            assert test_pass_fec_encoder = false 
+                report "------------------------- ### FEC Third Input Stream test passed Successfully" severity note ;
+            assert test_pass_fec_encoder = true 
+                report "------------------------- ### FEC Third Input Stream test Failed" severity note ;
+            
+
+                report "---------------------------------- ### The Fourth FEC Input Stream  " severity note;
+        procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);            
         report procedure_Break_Notice;
+            assert test_pass_fec_encoder = false 
+                report "------------------------- ### FEC Fourth Input Stream test passed Successfully" severity note ;
+            assert test_pass_fec_encoder = true 
+                report "------------------------- ### FEC Fourth Input Stream test Failed" severity note ;
+            
+                
+
+                report "---------------------------------- ### The Fifth FEC Input Stream  " severity note;
+        procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);           
+         report procedure_Break_Notice;
+            assert test_pass_fec_encoder = false 
+                report "------------------------- ### FEC Fifth Input Stream test passed Successfully" severity note ;
+            assert test_pass_fec_encoder = true 
+                report "------------------------- ### FEC Fifth Input Stream test Failed" severity note ;
+
+
+                report "========================================================================================================";
+                report "-------------------Finished self checker for: FEC Block--------------------------";
+                report "========================================================================================================";
+                
+
+
+     --  test_out_vector FEC_output_data:
+    -- report "Starting with Output Streaming" severity note; 
+    -- report procedure_Break_Notice;
+    -- report "First Output Streaming" severity note; 
+    -- procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
+    -- report "Second Output Streaming" severity note; 
+    -- procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
+    -- report "Third Output Streaming" severity note; 
+    -- procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
+    -- report "Fourth Output Streaming" severity note; 
+    -- procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
+    -- report "Fifth Output Streaming" severity note; 
+    -- procedure_192_outputs_FEC(0, 191, test_out_vector, FEC_output_data, FEC_Expected_Output, test_pass_fec_encoder);
+    -- report "Done with Output Streaming" severity note; 
+    -- report procedure_Break_Notice;
+
+    --     assert test_pass_fec_encoder = false 
+    --         report procedure_Break_Notice;
+    --         report "Test on 192 inputs passed successfully!" severity note; 
+    --         report procedure_Break_Notice;
+    report END_SIMULATION_Notice severity note;
+    report procedure_Break_Notice;
 
 
         -- for i in 191 downto 0 loop 

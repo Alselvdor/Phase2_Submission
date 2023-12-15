@@ -71,7 +71,22 @@ begin
         wait for CLK_50MHz_Period; --bec of 75 ns edge the next pos edge so make sure a pos edge came 
         load <= '0'; 
         randi_input_valid <= '1'; 
+                -- wait until randi_input_ready = '1';
+
+        report procedure_Break_Notice;
+        report procedure_start_SIMULATION_Notice severity note;
+        report procedure_Break_Notice;
+
+        report procedure_Break_Notice;
+        report "------------------------------ Inputting {1} Input Streams --------------------------------" severity note;
+        report procedure_Break_Notice;
+        report "---------------------------- ### Starting Inputting the First stream: " severity note;
+        report procedure_Break_Notice;
         procedure_96_inputs(0, 95, input_vector, randi_input_data);  --definition in package  
+        report "----------------------------- ### Done Inputting the First stream: " severity note;
+        report procedure_Break_Notice;
+        report "------------------------------ Finishehd Inputting {1} Input Streams --------------------------" severity note;
+        report procedure_Break_Notice;
         randi_input_valid  <= '0';
         wait; --makes process executes once 
     end process;
@@ -82,19 +97,25 @@ begin
     begin
         wait on randi_input_data;    --wait for a change in the input
         wait for 10 ns;         --to give time between input and output 
-        report procedure_Break_Notice;
-        report procedure_start_SIMULATION_Notice severity note;
-        report procedure_Break_Notice;
         test_pass_RANDI <= true;  -- Reset the test flag for MODU Q outputs
-
+        -- wait until randi_input_ready = '1';
+        report "========================================================================================================";
+        report "------------------------------------- STARTED Blocks SELF CHECKER --------------------------------------";
+        report "========================================================================================================";        
+        report "---------------------------- Started self checker for: Randomizer Block --------------------------------";
+        report "========================================================================================================";        
+        report "---------------------------------- ### The First Randimoizer Input Stream  " severity note;
         procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, randi_output_data, RANDI_Output_Expected, test_pass_RANDI);
-        
-        
         report procedure_Break_Notice;
-        assert test_pass_RANDI = false 
-            report procedure_Break_Notice;
-            report "Test on 92 inputs passed successfully!" severity note; 
-            report procedure_Break_Notice;
+            assert test_pass_RANDI = false 
+                report "------------------------- ### Randomizer First Input Stream test passed successfully" severity note ;
+            assert test_pass_RANDI = true 
+                report "------------------------- ### Randomizer First Input Stream test Failed" severity note ;
+        report procedure_Break_Notice;
+        report "========================================================================================================";
+        report "-------------------Finished self checker for: RANDI Block--------------------------";
+        report "========================================================================================================";
+        report procedure_Break_Notice;
         report END_SIMULATION_Notice severity note;
         report procedure_Break_Notice;
 
