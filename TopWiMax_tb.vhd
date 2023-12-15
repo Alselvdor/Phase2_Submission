@@ -43,6 +43,10 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     signal  fec_valid_alias_signal                : std_logic;
     signal  int_out_alias_signal                  : std_logic;
     signal  int_valid_alias_signal                : std_logic;
+    
+    signal RANDI_Output_Expected                        : std_logic_vector(95 downto 0) := RANDI_VECTOR_OUTPUT;
+    signal RANDI_Output_Vector                    : std_logic_vector(95 downto 0) := (others => '0');
+    signal test_pass_RANDI                          : boolean;
 
     
     signal test_out_vector_Q      : std_logic_vector(1535 downto 0) := (others => '0');
@@ -59,14 +63,14 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     --instantiations 
     twimax : TopWiMax port map 
     (
-        CLK_50Mhz       => clk_50,
-        reset           => reset,            
-        TopWiMax_in_valid              => TopWiMax_in_valid,    
-        load            => load,    	   
-        WiInput         => test_in_bit,        
-        TopWiMax_out_valid => out_valid,       
-        WiOutput1       => test_out1_bit,           
-        WiOutput2       => test_out2_bit         
+        CLK_50Mhz             => clk_50,
+        reset                 => reset,            
+        TopWiMax_in_valid     => TopWiMax_in_valid,    
+        load                  => load,    	   
+        WiInput               => test_in_bit,        
+        TopWiMax_out_valid    => out_valid,       
+        WiOutput1             => test_out1_bit,           
+        WiOutput2             => test_out2_bit         
     );
 
     --clk process 
@@ -84,12 +88,30 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         load <= '0'; 
         TopWiMax_in_valid <= '1'; 
         --Inputting steams 
+        report procedure_Break_Notice;
+        report procedure_start_SIMULATION_Notice severity note;
+        report procedure_Break_Notice;
+
+        report procedure_Break_Notice;
+        report "------------------------------ Inputting {2} Input Streams --------------------------------" severity note;
+        report procedure_Break_Notice;
+        report "---------------------------- ### Starting Inputting the First stream: " severity note;
+        report procedure_Break_Notice;
         procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
+        report "----------------------------- ### Done Inputting the First stream: " severity note;
+        report procedure_Break_Notice;
+        report "----------------------------- ## Starting Inputting the Second stream: " severity note;
+        report procedure_Break_Notice;
         procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
+        report "----------------------------- ## Done Inputting the Second stream: " severity note;
+        report procedure_Break_Notice;
+        report "------------------------------ Finishehd Inputting {2} Input Streams --------------------------" severity note;
+        report procedure_Break_Notice;
       --  procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
        -- procedure_96_inputs(0, 95, test_in_vector, test_in_bit);
-      --  procedure_96_inputs(0, 95, test_in_vector, test_in_bit);        
-       -- TopWiMax_in_valid  <= '0';
+      --  procedure_96_inputs(0, 95, test_in_vector, test_in_bit);     
+        test_in_bit <= '0';   
+        TopWiMax_in_valid  <= '0';
         wait; --makes process executes once 
     end process;
 
@@ -122,18 +144,47 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     begin         
         wait until out_valid = '1'; 
         wait for 2 ns; 
-        report procedure_Break_Notice;
-        report procedure_start_SIMULATION_Notice severity note;
-        report procedure_Break_Notice;
+
+        report "========================================================================================================";
+        report "------------------------------------- STARTED OUTPUT SELF CHECKER --------------------------------------";
+        report "========================================================================================================";  
         test_pass_MODU_encoder_Q <= true;  -- Reset the test flag for MODU Q outputs
         test_pass_MODU_encoder_I <= true;  -- Reset the test flag for MODU I outputs
-        report "--------Demodulating (5) output streams-------------" severity note;
-        report "Starting Demodulation of modulated output 1 stream: " severity note;
+        report "----------------------------- Checking (Demodulating) (2) output streams ---------------" severity note;
+        report procedure_Break_Notice;
+        report "------------------------ ### Started Checking First Output stream: " severity note;
         procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q, test_out1_bit, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I, test_out2_bit, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
+        assert test_pass_MODU_encoder_Q = false 
+            report "------------------------ ### First Output Stream: 1536 Q Values Successed" severity note;
+        assert test_pass_MODU_encoder_Q = true 
+            report "------------------------ ### First Output Stream: 1536 Q Values Failed" severity note;
+            report procedure_Break_Notice;
+        assert test_pass_MODU_encoder_I = false 
+            report "------------------------ ### First Output Stream: 1536 I Values Successed" severity note;
+        assert test_pass_MODU_encoder_I = true 
+            report "------------------------ ### First Output Stream: 1536 I Values failed" severity note;
+        report procedure_Break_Notice;
+        report "--------------------------- ### Ended Checking First Output stream " severity note;
+        report procedure_Break_Notice;
 
-        report "Starting Demodulation of modulated output 2 stream: " severity note;
+        report "-------------------------- ### Started Checking Second Output stream: " severity note;
         procedure_192_outputs_MODU_x2(0, 1535, test_out_vector_Q1, test_out1_bit, MODU_Expected_Output_Q, test_pass_MODU_encoder_Q, test_out_vector_I1, test_out2_bit, MODU_Expected_Output_I, test_pass_MODU_encoder_I);
+        assert test_pass_MODU_encoder_Q = false 
+            report "------------------------ ### Second Output Stream: 1536 Q Values Successed" severity note;
+        assert test_pass_MODU_encoder_Q = true 
+            report "------------------------ ### Second Output Stream: 1536 Q Values Failed" severity note;
+        
 
+            report procedure_Break_Notice;
+        assert test_pass_MODU_encoder_I = false 
+            report "------------------------ ### Second Output Stream: 1536 I Values Successed" severity note;
+        assert test_pass_MODU_encoder_I = true 
+            report "------------------------ ### Second Output Stream: 1536 I Values Failed" severity note;
+        report procedure_Break_Notice;
+        report "--------------------------- ### Ended Checking Second Output stream " severity note;
+        report procedure_Break_Notice;
+        report "----------------------------- Ended Checking (Demodulating) (2) output streams ---------------" severity note;
+        report procedure_Break_Notice;
         -- demodulation_procedure;
         -- report "Demodulation finished. " severity note;
         -- assert demodulation_vector /= MODU_VECTOR_INPUT
@@ -168,48 +219,49 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         -- report END_SIMULATION_Notice;
 
         report procedure_Break_Notice;
-        assert test_pass_MODU_encoder_Q = true 
-            report procedure_Break_Notice;
-            report "Test on 1536 output bits of Q passed successfully!" severity note;
-            report procedure_Break_Notice severity note; 
-        report procedure_Break_Notice;
-        assert test_pass_MODU_encoder_I = true 
-            report procedure_Break_Notice;
-            report "Test on 1536 output bits of I passed successfully!" severity note;
-            report procedure_Break_Notice severity note; 
-    
-        report procedure_Break_Notice;
         report END_SIMULATION_Notice severity note;
         report procedure_Break_Notice;
 
         wait;
     end process;
 
-    --------------------------------------------------------------Handshakes Verification-------------------------------------------------------------- 
+    --------------------------------------------------------------Self-Check Verification-------------------------------------------------------------- 
 
-    -- --Randomizer
-    -- process 
-    --     variable test_pass_randomizer: boolean := true;
-    --     procedure checker_randomizer is 
-    --         begin 
-    --         for i in 95 downto 0 loop 
-    --             if (rand_out_alias_signal /= RANDI_VECTOR_OUTPUT(i)) then 
-    --                 report "Bit " & integer'image(i) & " is wrong, test failed" severity error; 
-    --                 report "it is " & std_logic'image(rand_out_alias_signal) & " and it supposed to be: " & std_logic'image(RANDI_VECTOR_OUTPUT(i)) severity error;     
-    --                 test_pass_randomizer := false;                                      
-    --             end if;
-    --         wait for CLK_50MHz_Period;
-    --         end loop; 
-    --     end checker_randomizer;
-    -- begin 
-    --     wait for 1 ns;
-    --     wait until rand_valid_alias_signal = '1'; 
-    --     wait for 5 ns;
-    --     report "========================================================================================================";
-    --     report "------------------------------------STARTED HANDSHAKES SELF CHECKER--------------------------";
-    --     report "========================================================================================================";        
-    --     report "-------------------Started handshake self checker for: Randomizer Block--------------------------";
-    --     report "Randomizer stream 1: ";
+    --Randomizer
+    process 
+    begin 
+        report procedure_Break_Notice;
+        report "------------ Inputting {2} Input Streams ------------------------" severity note;
+        report procedure_Break_Notice;
+        report "---------------------------------- ### Starting Inputting the First stream: " severity note;
+        wait for 1 ns;
+        wait until rand_valid_alias_signal = '1'; 
+        wait for 5 ns;
+        report "========================================================================================================";
+        report "------------------------------------- STARTED Blocks SELF CHECKER --------------------------------------";
+        report "========================================================================================================";        
+        report "---------------------------- Started self checker for: Randomizer Block --------------------------------";
+        report "---------------------------------- ### The First Randimoizer Stream  " severity note;
+            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, rand_out_alias_signal, RANDI_Output_Expected, test_pass_RANDI);
+            report procedure_Break_Notice;
+            assert test_pass_RANDI = false 
+                report "------------------------- ### Randomizer First Stream test passed successfully" severity note ;
+            assert test_pass_RANDI = true 
+                report "------------------------- ### Randomizer First Stream test Failed" severity note ;
+            
+            report procedure_Break_Notice;
+            report "---------------------------------- ## The Second Randimoizer Stream  " severity note;
+            procedure_96_outputs_RANDI(0, 95, RANDI_Output_Vector, rand_out_alias_signal, RANDI_Output_Expected, test_pass_RANDI);
+            report procedure_Break_Notice;
+            assert test_pass_RANDI = false 
+                report "------------------------- ## Randomizer Second Stream test passed successfully" severity note ;
+            assert test_pass_RANDI = true 
+                report "------------------------- ## Randomizer Second Stream test Failed" severity note ;
+            
+            
+            report procedure_Break_Notice;
+            
+
     --     checker_randomizer;
     --     if (test_pass_randomizer = true) then 
     --         report "Randomizer stream 1 test passed successfully" ;
@@ -234,9 +286,11 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     --     if (test_pass_randomizer = true) then 
     --         report "Randomizer stream 5 test passed successfully" ;
     --     end if;
-    --     report "-------------------Finished handshake self checker for: Randomizer Block--------------------------";
-    --     wait;
-    -- end process;
+        report "---------------------------- Finished self checker for: Randomizer Block -----------------------------";
+        report procedure_Break_Notice;
+
+        wait;
+    end process;
 
     -- --FEC Enconder
     -- process 
@@ -343,9 +397,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         -- alias fec_out_alias_signal    is TopWiMax_tb.twimax.fec_out;
         -- alias fec_valid_alias_signal  is TopWiMax_tb.twimax.FEC_encoder_out_valid_out;
         -- alias int_out_alias_signal    is TopWiMax_tb.twimax.INTER_out;
-        -- alias int_valid_alias_signal  is TopWiMax_tb.twimax.INTER_out_valid;
-
-         
+        -- alias int_valid_alias_signal  is TopWiMax_tb.twimax.INTER_out_valid;   
         rand_out_alias_signal   <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_data    : std_logic >>; 
         rand_valid_alias_signal <=  <<signal .topwimax_tb.twimax.RANDI1.RANDI_output_valid   : std_logic >>; 
         fec_out_alias_signal    <=  <<signal .topwimax_tb.twimax.fec1.fec_output_data        : std_logic >>;  

@@ -16,13 +16,15 @@ package Test_Pack is
 	constant CLK_100MHz_test                       : Time := CLK_100MHz_Period / 2;
 
     --------------- B) SIM Notice:
-    constant procedure_start_SIMULATION_Notice    : string := "----------------- Simulation procedure_started -----------";
-    constant procedure_Break_Notice                : string :=    "-----------------------------------------------------------";
-    constant END_SIMULATION_Notice                : string := "-------------------- Simulation Finished ------------------"; 
+    constant procedure_start_SIMULATION_Notice    : string :=  "------------------------------------------ Simulation Started -------------------------------------------------";
+    constant procedure_Break_Notice                : string := "===============================================================================================================";
+    constant END_SIMULATION_Notice                : string :=  "----------------------------------------- Simulation Finished -------------------------------------------------"; 
     --signal temp                                    : std_logic_vector(0 downto 0);
     --%%%%%%% Block Specfic :
     ------------------------ A) Randi
-    constant RANDI_VECTOR_INPUT      : std_logic_vector(95 downto 0)  := x"ACBCD2114DAE1577C6DBF4C9"; 
+    constant RANDI_VECTOR_INPUT      : std_logic_vector(95 downto 0)  := x"ACBCD2114DAE1577C6DBF4C9"; -- correct 
+    --constant RANDI_VECTOR_INPUT      : std_logic_vector(95 downto 0)  := x"558AC4A53A1724E163AC2BF9"; -- inject fail
+
     constant RANDI_VECTOR_OUTPUT     : std_logic_vector(95 downto 0)  := x"558AC4A53A1724E163AC2BF9";
     ------------------------ B) FEC 
     constant FEC_VECTOR_INPUT             : std_logic_vector(95 downto 0)  := x"558AC4A53A1724E163AC2BF9";
@@ -215,25 +217,25 @@ package body Test_Pack is
         test_pass_MODU_encoder <= true;
             for i in procedure_end downto procedure_start loop 
                 exit when lcount = MAX_ITERATIONS;  -- Exit the loop when lcount reaches the maximum number of iterations
-                    report "Outer Loop Count: " & integer'image(lcount) severity note;
+                    -- report "Outer Loop Count: " & integer'image(lcount) severity note;
                     for j in 15 downto 0 loop 
                     output_vector((i - (15 - j)) - lcount * 15) <= Test_bit_output(j);
                     output_vector1((i - (15 - j)) - lcount * 15) <= Test_bit_output1(j);
-                    report "Inner Bit Count: " & integer'image(j) severity note;
+                    --report "Inner Bit Count: " & integer'image(j) severity note;
                         if ExpectedOutput((i - (15 - j)) - lcount * 15) = Test_bit_output(j) then 
                             --report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is correct, test passed" severity note; 
                             --report "And Equals " & std_logic'image(ExpectedOutput((i - (15 - j)) - lcount * 15)) & " as expected" severity note; 
                         else
-                            report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is incorrect, test failed" severity error; 
-                            report "Expected: " & std_logic'image(ExpectedOutput((i - (15 - j)) - lcount * 15)) & ", Got: " & std_logic'image(Test_bit_output(j)) severity error;
+                            --report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is incorrect, test failed" severity error; 
+                            --report "Expected: " & std_logic'image(ExpectedOutput((i - (15 - j)) - lcount * 15)) & ", Got: " & std_logic'image(Test_bit_output(j)) severity error;
                             test_pass_MODU_encoder <= false;                                      
                         end if;
                         if ExpectedOutput1((i - (15 - j)) - lcount * 15) = Test_bit_output1(j) then 
                             --report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is correct, test passed" severity note; 
                             --report "And Equals " & std_logic'image(ExpectedOutput((i - (15 - j)) - lcount * 15)) & " as expected" severity note; 
                         else
-                            report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is incorrect, test failed" severity error; 
-                            report "Expected: " & std_logic'image(ExpectedOutput1((i - (15 - j)) - lcount * 15)) & ", Got: " & std_logic'image(Test_bit_output1(j)) severity error;
+                            --report "Bit " & integer'image((i - (15 - j)) - lcount * 15) & " is incorrect, test failed" severity error; 
+                            --report "Expected: " & std_logic'image(ExpectedOutput1((i - (15 - j)) - lcount * 15)) & ", Got: " & std_logic'image(Test_bit_output1(j)) severity error;
                             test_pass_MODU_encoder1 <= false;                                      
                         end if;
                         wait for 1 ps; 
@@ -246,15 +248,15 @@ package body Test_Pack is
 
     procedure procedure_96_outputs_RANDI (procedure_start, procedure_end : in integer; signal output_vector : out std_logic_vector(95 downto 0); signal Test_bit_output : in std_logic; signal ExpectedOutput : in std_logic_vector(95 downto 0); signal test_pass_INTER_encoder : out boolean) is  
         begin 
+        test_pass_INTER_encoder <= true;
             for i in procedure_end downto procedure_start loop 
                 output_vector(i) <= Test_bit_output;
                 if (ExpectedOutput(i) = Test_bit_output) then 
-                    report "Bit " & integer'image(i) & " is correct, test passed" severity note; 
-                    report "And Equals " & std_logic'image(ExpectedOutput(i)) & " as expected" severity note; 
-                    test_pass_INTER_encoder <= true;                                      
+                   -- report "Bit " & integer'image(i) & " is correct, test passed" severity note; 
+                   -- report "And Equals " & std_logic'image(ExpectedOutput(i)) & " as expected" severity note; 
                 else
-                    report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
-                    report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
+                    --report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
+                    --report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
                     test_pass_INTER_encoder <= false;                                      
                 end if;
                 wait for CLK_50MHz_Period; 
