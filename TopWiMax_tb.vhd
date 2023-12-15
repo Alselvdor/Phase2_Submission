@@ -44,29 +44,35 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     signal  int_out_alias_signal                  : std_logic;
     signal  int_valid_alias_signal                : std_logic;
     
+    -- Randi Self Checker Signals
     signal RANDI_Output_Expected                        : std_logic_vector(95 downto 0) := RANDI_VECTOR_OUTPUT;
     signal RANDI_Output_Vector                      : std_logic_vector(95 downto 0) := (others => '0');
     signal test_pass_RANDI                          : boolean;
 
-    
+    -- FEC Self Checker Signals
     signal   test_pass_fec_encoder                : boolean := true;
     signal   FEC_Expected_Output                  : std_logic_vector(191 downto 0) := FEC_VECTOR_OUTPUT;
     signal   FEC_Output_Vector                      : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
 
-
+    -- INTER Self Checker Signals
     signal test_pass_INTER_encoder                : boolean := true;
     signal INTER_Output_Vector                        : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
     signal INTER_Expected_Output                  : std_logic_vector(191 downto 0) := INTER_VECTOR_OUTPUT;
 
-
-    signal test_out_vector_Q      : std_logic_vector(1535 downto 0) := (others => '0');
-    signal test_out_vector_I      : std_logic_vector(1535 downto 0) := (others => '0');
-    signal test_out_vector_Q1      : std_logic_vector(1535 downto 0) := (others => '0');
-    signal test_out_vector_I1      : std_logic_vector(1535 downto 0) := (others => '0');
-    signal MODU_Expected_Output_Q : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_Q;
-    signal MODU_Expected_Output_I : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_I;
+    -- MODU Self Checker Signals
+    signal test_out_vector_Q         : std_logic_vector(1535 downto 0) := (others => '0');
+    signal test_out_vector_I         : std_logic_vector(1535 downto 0) := (others => '0');
+    signal test_out_vector_Q1        : std_logic_vector(1535 downto 0) := (others => '0');
+    signal test_out_vector_I1        : std_logic_vector(1535 downto 0) := (others => '0');
+    signal MODU_Expected_Output_Q    : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_Q;
+    signal MODU_Expected_Output_I    : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_I;
     signal test_pass_MODU_encoder_I                : boolean := true;
     signal test_pass_MODU_encoder_Q                : boolean := true;
+
+
+    -- Auto Streaming Test
+    -- constant streamingnumber : integer := 1;
+
 
     begin 
 
@@ -235,9 +241,9 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         wait;
     end process;
 
-    --------------------------------------------------------------Self-Check Verification-------------------------------------------------------------- 
+    -------------------------------------------------------------- Blocks Self-Check Verification-------------------------------------------------------------- 
 
-    --Randomizer
+    -- Randi
     process 
     begin 
         wait for 1 ns;
@@ -300,7 +306,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         wait;
     end process;
 
-    --FEC Enconder
+    -- FEC 
     process 
         begin 
          wait for 1 ns;
@@ -364,7 +370,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
         wait;
     end process;
 
-    -- -- INTER
+    -- INTER
     process 
 
     begin 
@@ -428,7 +434,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     wait;
     end process;
 
-        -- -- Alias assignments 
+        -- Alias assignments 
         -- alias rand_out_alias_signal   is TopWiMax_tb.twimax.RANDI.RANDI_out;
         -- alias rand_valid_alias_signal is TopWiMax_tb.twimax.RANDI.RANDI_out_valid;
         -- alias fec_out_alias_signal    is TopWiMax_tb.twimax.fec_out;
