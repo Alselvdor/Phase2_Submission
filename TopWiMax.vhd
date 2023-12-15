@@ -7,11 +7,11 @@ USE altera_mf.altera_mf_components.all;
 entity TopWiMax is 
     port(
         CLK_50Mhz                            	  : in    std_logic; 
-        reset                 	                  : in    std_logic; 
-        load               	                      : in    std_logic; 
+        reset                 	                 : in    std_logic; 
+        load               	                    : in    std_logic; 
 
-        TopWiMax_in_valid                 	      : in    std_logic; 
-        TopWiMax_in_ready                	      : in    std_logic; 
+        TopWiMax_in_valid                 	     : in    std_logic; 
+        TopWiMax_in_ready                	        : in    std_logic; 
         WiInput                               	  : in    std_logic; 
         
         TopWiMax_out_valid                        : out   std_logic;
@@ -29,8 +29,8 @@ architecture TopWiMax_RTL of TopWiMax is
         port (
             refclk                                  : in  std_logic := 'X'; --  refclk.clk
             rst                                     : in  std_logic := 'X'; --   reset.reset
-            outclk_0                               : out std_logic;        -- outclk0.clk
-            outclk_1                              : out std_logic;        -- outclk1.clk
+            outclk_0                                : out std_logic;        -- outclk0.clk
+            outclk_1                                : out std_logic;        -- outclk1.clk
             locked                                  : out std_logic         --  locked.export
         );
     end component;
@@ -83,7 +83,7 @@ architecture TopWiMax_RTL of TopWiMax is
 
             INTER_Output_data                       : out   std_logic;
             INTER_Output_valid                      : out   std_logic;
-            INTER_Output_ready                     : out   std_logic  
+            INTER_Output_ready                      : out   std_logic  
         );
     end component;
 

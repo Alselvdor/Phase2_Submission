@@ -1,5 +1,5 @@
 
-State Machine - |TopWiMax|INTER:int1|state_reg
+State Machine - |TopWiMax|INTER:inter1|state_reg
 Name state_reg.PingPong_state state_reg.input_buffer state_reg.idle 
 state_reg.idle 0 0 0 
 state_reg.input_buffer 0 1 1 

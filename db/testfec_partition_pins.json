@@ -8,6 +8,10 @@
 					"strict" : false
 				},
 				{
+					"name" : "TopWiMax_out_ready",
+					"strict" : false
+				},
+				{
 					"name" : "WiOutput1[0]",
 					"strict" : false
 				},
@@ -133,6 +137,10 @@
 				},
 				{
 					"name" : "WiOutput2[15]",
+					"strict" : false
+				},
+				{
+					"name" : "TopWiMax_in_ready",
 					"strict" : false
 				},
 				{

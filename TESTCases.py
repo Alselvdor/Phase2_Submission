@@ -40,9 +40,9 @@
 
 
 # ==============   TopWiMax
-#    Time: 7775 ns 
-#    SIM:  8000 ns
-#    In  :   2    Streams
+#    Time: 13618 ns 
+#    SIM:  14000 ns
+#    In  :   4    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES
 # [OUTPUT] SELF CHECK DONE     >> YES

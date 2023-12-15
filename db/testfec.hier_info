@@ -1,42 +1,44 @@
 |TopWiMax
 CLK_50Mhz => PLL_main:pll1.refclk
 reset => PLL_main:pll1.rst
-TopWiMax_in_valid => randi:RANDI1.randi_input_valid
 load => randi:RANDI1.load
+TopWiMax_in_valid => randi:RANDI1.randi_input_valid
+TopWiMax_in_ready => MODU:modu1.MODU_input_ready
 WiInput => randi:RANDI1.randi_input_data
-TopWiMax_out_valid <= MODU:mod1.MODU_output_valid
-WiOutput1[0] <= MODU:mod1.MODU_output_Q[0]
-WiOutput1[1] <= MODU:mod1.MODU_output_Q[1]
-WiOutput1[2] <= MODU:mod1.MODU_output_Q[2]
-WiOutput1[3] <= MODU:mod1.MODU_output_Q[3]
-WiOutput1[4] <= MODU:mod1.MODU_output_Q[4]
-WiOutput1[5] <= MODU:mod1.MODU_output_Q[5]
-WiOutput1[6] <= MODU:mod1.MODU_output_Q[6]
-WiOutput1[7] <= MODU:mod1.MODU_output_Q[7]
-WiOutput1[8] <= MODU:mod1.MODU_output_Q[8]
-WiOutput1[9] <= MODU:mod1.MODU_output_Q[9]
-WiOutput1[10] <= MODU:mod1.MODU_output_Q[10]
-WiOutput1[11] <= MODU:mod1.MODU_output_Q[11]
-WiOutput1[12] <= MODU:mod1.MODU_output_Q[12]
-WiOutput1[13] <= MODU:mod1.MODU_output_Q[13]
-WiOutput1[14] <= MODU:mod1.MODU_output_Q[14]
-WiOutput1[15] <= MODU:mod1.MODU_output_Q[15]
-WiOutput2[0] <= MODU:mod1.MODU_output_I[0]
-WiOutput2[1] <= MODU:mod1.MODU_output_I[1]
-WiOutput2[2] <= MODU:mod1.MODU_output_I[2]
-WiOutput2[3] <= MODU:mod1.MODU_output_I[3]
-WiOutput2[4] <= MODU:mod1.MODU_output_I[4]
-WiOutput2[5] <= MODU:mod1.MODU_output_I[5]
-WiOutput2[6] <= MODU:mod1.MODU_output_I[6]
-WiOutput2[7] <= MODU:mod1.MODU_output_I[7]
-WiOutput2[8] <= MODU:mod1.MODU_output_I[8]
-WiOutput2[9] <= MODU:mod1.MODU_output_I[9]
-WiOutput2[10] <= MODU:mod1.MODU_output_I[10]
-WiOutput2[11] <= MODU:mod1.MODU_output_I[11]
-WiOutput2[12] <= MODU:mod1.MODU_output_I[12]
-WiOutput2[13] <= MODU:mod1.MODU_output_I[13]
-WiOutput2[14] <= MODU:mod1.MODU_output_I[14]
-WiOutput2[15] <= MODU:mod1.MODU_output_I[15]
+TopWiMax_out_valid <= MODU:modu1.MODU_output_valid
+TopWiMax_out_ready <= randi:RANDI1.randi_output_ready
+WiOutput1[0] <= MODU:modu1.MODU_output_Q[0]
+WiOutput1[1] <= MODU:modu1.MODU_output_Q[1]
+WiOutput1[2] <= MODU:modu1.MODU_output_Q[2]
+WiOutput1[3] <= MODU:modu1.MODU_output_Q[3]
+WiOutput1[4] <= MODU:modu1.MODU_output_Q[4]
+WiOutput1[5] <= MODU:modu1.MODU_output_Q[5]
+WiOutput1[6] <= MODU:modu1.MODU_output_Q[6]
+WiOutput1[7] <= MODU:modu1.MODU_output_Q[7]
+WiOutput1[8] <= MODU:modu1.MODU_output_Q[8]
+WiOutput1[9] <= MODU:modu1.MODU_output_Q[9]
+WiOutput1[10] <= MODU:modu1.MODU_output_Q[10]
+WiOutput1[11] <= MODU:modu1.MODU_output_Q[11]
+WiOutput1[12] <= MODU:modu1.MODU_output_Q[12]
+WiOutput1[13] <= MODU:modu1.MODU_output_Q[13]
+WiOutput1[14] <= MODU:modu1.MODU_output_Q[14]
+WiOutput1[15] <= MODU:modu1.MODU_output_Q[15]
+WiOutput2[0] <= MODU:modu1.MODU_output_I[0]
+WiOutput2[1] <= MODU:modu1.MODU_output_I[1]
+WiOutput2[2] <= MODU:modu1.MODU_output_I[2]
+WiOutput2[3] <= MODU:modu1.MODU_output_I[3]
+WiOutput2[4] <= MODU:modu1.MODU_output_I[4]
+WiOutput2[5] <= MODU:modu1.MODU_output_I[5]
+WiOutput2[6] <= MODU:modu1.MODU_output_I[6]
+WiOutput2[7] <= MODU:modu1.MODU_output_I[7]
+WiOutput2[8] <= MODU:modu1.MODU_output_I[8]
+WiOutput2[9] <= MODU:modu1.MODU_output_I[9]
+WiOutput2[10] <= MODU:modu1.MODU_output_I[10]
+WiOutput2[11] <= MODU:modu1.MODU_output_I[11]
+WiOutput2[12] <= MODU:modu1.MODU_output_I[12]
+WiOutput2[13] <= MODU:modu1.MODU_output_I[13]
+WiOutput2[14] <= MODU:modu1.MODU_output_I[14]
+WiOutput2[15] <= MODU:modu1.MODU_output_I[15]
 
 
 |TopWiMax|PLL_main:pll1
@@ -374,59 +376,15 @@ load => counter_reset_seed[3].ENA
 load => counter_reset_seed[2].ENA
 load => counter_reset_seed[1].ENA
 randi_input_data => randi_output_data_reg.IN1
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => seed_reg.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
-randi_input_valid => counter_reset_seed.OUTPUTSELECT
+randi_input_valid => process_0.IN0
 randi_input_valid => randi_output_valid.DATAIN
 randi_input_valid => xor_1.OUTPUTSELECT
 randi_input_valid => randi_output_data_reg.OUTPUTSELECT
-randi_input_ready => ~NO_FANOUT~
+randi_input_ready => process_0.IN1
+randi_input_ready => randi_output_ready.DATAIN
 randi_output_data <= randi_output_data_reg.DB_MAX_OUTPUT_PORT_TYPE
 randi_output_valid <= randi_input_valid.DB_MAX_OUTPUT_PORT_TYPE
+randi_output_ready <= randi_input_ready.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |TopWiMax|FEC:fec1
@@ -640,10 +598,11 @@ FEC_input_valid => Selector33.IN2
 FEC_input_valid => FEC_RAM_2PORTS:ram1.wren_a
 FEC_input_valid => process_0.IN1
 FEC_input_valid => Selector32.IN1
-FEC_input_ready => ~NO_FANOUT~
+FEC_input_ready => process_1.IN1
+FEC_input_ready => FEC_output_ready.DATAIN
 FEC_output_data <= FEC_output_data.DB_MAX_OUTPUT_PORT_TYPE
 FEC_output_valid <= FEC_encoder_out_valid.DB_MAX_OUTPUT_PORT_TYPE
-FEC_output_ready => ~NO_FANOUT~
+FEC_output_ready <= FEC_input_ready.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |TopWiMax|FEC:fec1|FEC_RAM_2PORTS:ram1
@@ -740,7 +699,7 @@ wren_a => ram_block1a0.PORTAWE
 wren_b => ram_block1a0.PORTBWE
 
 
-|TopWiMax|INTER:int1
+|TopWiMax|INTER:inter1
 clk_100MHz => PingPong_flag.CLK
 clk_100MHz => INTER_Output_valid~reg0.CLK
 clk_100MHz => counter_out[0].CLK
@@ -853,13 +812,14 @@ INTER_input_valid => Selector14.IN2
 INTER_input_valid => INTER_RAM_2PORT:ram2.wren_a
 INTER_input_valid => process_0.IN1
 INTER_input_valid => Selector13.IN1
-INTER_input_ready => ~NO_FANOUT~
+INTER_input_ready => process_0.IN1
+INTER_input_ready => INTER_Output_ready.DATAIN
 INTER_Output_data <= INTER_RAM_2PORT:ram2.q_b[0]
 INTER_Output_valid <= INTER_Output_valid~reg0.DB_MAX_OUTPUT_PORT_TYPE
-INTER_Output_ready <= comb.DB_MAX_OUTPUT_PORT_TYPE
+INTER_Output_ready <= INTER_input_ready.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|TopWiMax|INTER:int1|INTER_RAM_2PORT:ram2
+|TopWiMax|INTER:inter1|INTER_RAM_2PORT:ram2
 address_a[0] => altsyncram:altsyncram_component.address_a[0]
 address_a[1] => altsyncram:altsyncram_component.address_a[1]
 address_a[2] => altsyncram:altsyncram_component.address_a[2]
@@ -887,7 +847,7 @@ q_a[0] <= altsyncram:altsyncram_component.q_a[0]
 q_b[0] <= altsyncram:altsyncram_component.q_b[0]
 
 
-|TopWiMax|INTER:int1|INTER_RAM_2PORT:ram2|altsyncram:altsyncram_component
+|TopWiMax|INTER:inter1|INTER_RAM_2PORT:ram2|altsyncram:altsyncram_component
 wren_a => altsyncram_9014:auto_generated.wren_a
 rden_a => ~NO_FANOUT~
 wren_b => altsyncram_9014:auto_generated.wren_b
@@ -931,7 +891,7 @@ eccstatus[1] <= <GND>
 eccstatus[2] <= <GND>
 
 
-|TopWiMax|INTER:int1|INTER_RAM_2PORT:ram2|altsyncram:altsyncram_component|altsyncram_9014:auto_generated
+|TopWiMax|INTER:inter1|INTER_RAM_2PORT:ram2|altsyncram:altsyncram_component|altsyncram_9014:auto_generated
 address_a[0] => ram_block1a0.PORTAADDR
 address_a[1] => ram_block1a0.PORTAADDR1
 address_a[2] => ram_block1a0.PORTAADDR2
@@ -959,7 +919,7 @@ wren_a => ram_block1a0.PORTAWE
 wren_b => ram_block1a0.PORTBWE
 
 
-|TopWiMax|MODU:mod1
+|TopWiMax|MODU:modu1
 clk_100MHz => MODU_output_valid~reg0.CLK
 clk_100MHz => MODU_output_I[0]~reg0.CLK
 clk_100MHz => MODU_output_I[1]~reg0.CLK
@@ -1070,6 +1030,8 @@ MODU_input_valid => MODU_output_I[3]~reg0.ENA
 MODU_input_valid => MODU_output_I[2]~reg0.ENA
 MODU_input_valid => MODU_output_I[1]~reg0.ENA
 MODU_input_valid => MODU_output_I[0]~reg0.ENA
+MODU_input_ready => process_1.IN1
+MODU_input_ready => MODU_output_ready.DATAIN
 MODU_output_Q[0] <= MODU_output_Q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 MODU_output_Q[1] <= MODU_output_Q[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 MODU_output_Q[2] <= MODU_output_Q[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
@@ -1103,6 +1065,6 @@ MODU_output_I[13] <= MODU_output_I[13]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 MODU_output_I[14] <= MODU_output_I[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 MODU_output_I[15] <= MODU_output_I[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 MODU_output_valid <= MODU_output_valid~reg0.DB_MAX_OUTPUT_PORT_TYPE
-MODU_output_ready <= comb.DB_MAX_OUTPUT_PORT_TYPE
+MODU_output_ready <= MODU_input_ready.DB_MAX_OUTPUT_PORT_TYPE
 
 
