@@ -119,6 +119,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
     --clk process 
     clk_50 <= not clk_50 after CLK_50MHz_Period_HALF; 
 
+    
     --assigning input bits from the vector 
     process begin 
         reset <= '1'; --initialize values 
