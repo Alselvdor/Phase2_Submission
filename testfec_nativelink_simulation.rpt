@@ -1,5 +1,5 @@
 Info: Start Nativelink Simulation process
-Info: NativeLink has detected VHDL design -- VHDL simulation models will be used
+executing command line: ip-make-simscript --nativelink-mode --output-directory=testfec_iputf_input --spd=D:/AUC/ASIC/Project/Phase2_Submission/PLL_main.spd 
 
 ========= EDA Simulation Settings =====================
 
@@ -19,6 +19,6 @@ Sim dir               :  simulation\modelsim
 
 Info: Starting NativeLink simulation with ModelSim-Altera software
 Sourced NativeLink script c:/intelfpga_lite/18.1/quartus/common/tcl/internal/nativelink/modelsim.tcl
-Warning: File testfec_run_msim_rtl_vhdl.do already exists - backing up current file as testfec_run_msim_rtl_vhdl.do.bak6
+Warning: File testfec_run_msim_rtl_vhdl.do already exists - backing up current file as testfec_run_msim_rtl_vhdl.do.bak8
 Info: Spawning ModelSim-Altera Simulation software 
 Info: NativeLink simulation flow was successful

@@ -42,6 +42,8 @@ architecture MODU_tb_rtl of MODU_tb is
 
     signal flag                   : std_logic := '0';
 
+    signal MODU_Expected_Output_Q : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_Q;
+    signal MODU_Expected_Output_I : std_logic_vector(1535 downto 0) := MODU_VECTOR_OUTPUT_I;
     signal test_pass_MODU_encoder_I                : boolean := true;
     signal test_pass_MODU_encoder_Q                : boolean := true;
 

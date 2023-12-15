@@ -8,10 +8,10 @@ module  PLL_0002(
 	input wire rst,
 
 	// interface 'outclk0'
-	output wire outclk_0,
+	output wire CLK_50Mhz,
 
 	// interface 'outclk1'
-	output wire outclk_1,
+	output wire CLK_100Mhz,
 
 	// interface 'locked'
 	output wire locked
@@ -80,7 +80,7 @@ module  PLL_0002(
 		.pll_subtype("General")
 	) altera_pll_i (
 		.rst	(rst),
-		.outclk	({outclk_1, outclk_0}),
+		.outclk	({CLK_50Mhz, CLK_100Mhz}),
 		.locked	(locked),
 		.fboutclk	( ),
 		.fbclk	(1'b0),

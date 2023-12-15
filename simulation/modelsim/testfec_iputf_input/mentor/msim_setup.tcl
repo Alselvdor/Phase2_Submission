@@ -1,0 +1,3 @@
+
+
+vcom "D:/AUC/ASIC/Project/Phase2_Submission/PLL_main_sim/PLL_main.vho"

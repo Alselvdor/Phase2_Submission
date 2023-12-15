@@ -12,8 +12,8 @@ entity PLL is
 	port (
 		refclk   : in  std_logic := '0'; --  refclk.clk
 		rst      : in  std_logic := '0'; --   reset.reset
-		outclk_0 : out std_logic;        -- outclk0.clk
-		outclk_1 : out std_logic;        -- outclk1.clk
+		CLK_50Mhz : out std_logic;        -- outclk0.clk
+		CLK_100Mhz : out std_logic;        -- outclk1.clk
 		locked   : out std_logic         --  locked.export
 	);
 end entity PLL;
@@ -23,8 +23,8 @@ architecture rtl of PLL is
 		port (
 			refclk   : in  std_logic := 'X'; -- clk
 			rst      : in  std_logic := 'X'; -- reset
-			outclk_0 : out std_logic;        -- clk
-			outclk_1 : out std_logic;        -- clk
+			CLK_50Mhz : out std_logic;        -- clk
+			CLK_100Mhz : out std_logic;        -- clk
 			locked   : out std_logic         -- export
 		);
 	end component PLL_0002;
@@ -35,8 +35,8 @@ begin
 		port map (
 			refclk   => refclk,   --  refclk.clk
 			rst      => rst,      --   reset.reset
-			outclk_0 => outclk_0, -- outclk0.clk
-			outclk_1 => outclk_1, -- outclk1.clk
+			CLK_50Mhz => CLK_50Mhz, -- outclk0.clk
+			CLK_100Mhz => CLK_100Mhz, -- outclk1.clk
 			locked   => locked    --  locked.export
 		);
 
