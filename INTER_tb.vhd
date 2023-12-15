@@ -33,15 +33,16 @@ architecture INTER_tb_rtl of INTER_tb is
     signal INTER_input_ready                                     : std_logic; 
 
     signal test_in_vector                         : std_logic_vector(191 downto 0) := x"2833E48D392026D5B6DC5E4AF47ADD29494B6C89151348CA";
-    signal test_out_vector                        : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
-    signal INTER_Expected_Output                  : std_logic_vector(191 downto 0) := INTER_VECTOR_OUTPUT;
     signal INTER_Input_data                            : std_logic;
     signal INTER_Output_data                           : std_logic;
     signal test_pass_INTER_encoder                : boolean := true;
     signal INTER_Output_valid                              : std_logic;
     signal INTER_Output_ready                              : std_logic;
-
     signal flag                                   : std_logic := '0';
+    
+    signal test_pass_INTER_encoder                : boolean := true;
+    signal test_out_vector                        : std_logic_vector(191 downto 0) := x"000000000000000000000000000000000000000000000000";
+    signal INTER_Expected_Output                  : std_logic_vector(191 downto 0) := INTER_VECTOR_OUTPUT;
 
 
 begin 

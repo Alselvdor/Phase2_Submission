@@ -142,13 +142,14 @@ package body Test_Pack is
     signal test_pass_fec_encoder : out boolean) is  
 
     begin 
+        test_pass_fec_encoder <= true;  
         for i in procedure_end downto procedure_start loop 
             output_vector(i) <= Test_bit_output;
             if (ExpectedOutput(i) = Test_bit_output) then 
-                report "{Streaming Out} Bit #" & integer'image(i) & " And it is correct, test passed" severity note; 
+                --report "{Streaming Out} Bit #" & integer'image(i) & " And it is correct, test passed" severity note; 
             else
-                report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
-                report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
+                --report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
+                --report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
                 test_pass_fec_encoder <= false;                                      
             end if;
             wait  for CLK_100MHz_Period; 
@@ -157,14 +158,15 @@ package body Test_Pack is
 
     procedure procedure_192_outputs_INTER (procedure_start, procedure_end : in integer; signal output_vector : out std_logic_vector(191 downto 0); signal Test_bit_output : in std_logic; signal ExpectedOutput : in std_logic_vector(191 downto 0); signal test_pass_INTER_encoder : out boolean) is  
     begin 
+        test_pass_INTER_encoder <= true;
         for i in procedure_end downto procedure_start loop 
             output_vector(i) <= Test_bit_output;
             if (ExpectedOutput(i) = Test_bit_output) then 
-                report "Bit " & integer'image(i) & " is correct, test passed" severity note; 
-                report "And Equals " & std_logic'image(ExpectedOutput(i)) & " as expected" severity note; 
+                --report "Bit " & integer'image(i) & " is correct, test passed" severity note; 
+                --report "And Equals " & std_logic'image(ExpectedOutput(i)) & " as expected" severity note; 
             else
-                report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
-                report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
+                --report "Bit " & integer'image(i) & " is incorrect, test failed" severity error; 
+                --report "Expected: " & std_logic'image(ExpectedOutput(i)) & ", Got: " & std_logic'image(Test_bit_output) severity error;
                 test_pass_INTER_encoder <= false;                                      
             end if;
             wait for CLK_100MHz_Period; 
