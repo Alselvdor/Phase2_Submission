@@ -69,6 +69,7 @@ begin
         reset              <= '1';
         wait for CLK_100MHz_Period + 5 ns;
         reset              <= '0';
+        wait for CLK_100MHz_Period + 5 ns;
         MODU_input_valid   <= '1';
         MODU_input_ready   <= '1';
 
@@ -97,6 +98,7 @@ begin
 
         MODU_input_data    <= 'X';
         MODU_input_valid   <= '0';
+        MODU_input_ready   <= '0';
         wait;
     end process;
 

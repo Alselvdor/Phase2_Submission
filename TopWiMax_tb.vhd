@@ -169,6 +169,7 @@ architecture TopWiMax_tb_rtl of TopWiMax_tb is
       --  procedure_96_inputs(0, 95, test_in_vector, WiInput    );     
         WiInput     <= '0';   
         TopWiMax_in_valid  <= '0';
+        TopWiMax_in_ready  <= '0';
         wait; --makes process executes once 
     end process;
 

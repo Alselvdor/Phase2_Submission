@@ -37,8 +37,8 @@ architecture randi_rtl of randi is
 begin
     
     --continuous assignments
-    randi_input_data_reg         <= randi_input_data;   --connect input with internal signal
-
+   --randi_input_data_reg         <= randi_input_data when (randi_input_ready = '1') else '0';;   --connect input with internal signal
+   randi_input_data_reg         <= randi_input_data;
     FEC_Recieveing_Ready         <= randi_input_ready; 
 
     randi_output_data            <= randi_output_data_reg; --connect output with internal signal 
@@ -58,8 +58,7 @@ begin
         -- if reset is high then operate, but check enable and load first 
             if(load = '1') then
                 seed_reg <= seed_reg2;    --initialize the seed reg with input seed
-
-            elsif(randi_input_valid = '1' and FEC_Recieveing_Ready = '1') then
+            elsif(randi_input_valid = '1') then
                 seed_reg            <= seed_reg(SEED_WIDTH-2 downto 0) & xor_1;    --shift left by 1 and xor with xoring result of last 2 bits
                 counter_reset_seed  <= counter_reset_seed + 1;
                 if (counter_reset_seed = 95) then 

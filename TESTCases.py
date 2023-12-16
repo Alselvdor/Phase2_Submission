@@ -1,6 +1,6 @@
 # ==============  RANDI Block
-#    Time:   1965 ns
-#    SIM :   2000 ns
+#    Time:   3965 ns
+#    SIM :   4000 ns
 #    In  :   2    Streams
 # [INPUT]  SELF CHECK DONE     >> YES 
 # [INPUT]  SELF CHECK WORKING  >> YES

@@ -60,8 +60,11 @@ begin
     --serial input in 
     process begin 
         reset   <= '1'; 
+        FEC_input_valid    <= '0';
+        FEC_input_ready    <= '0';
         wait for CLK_50MHz_Period + 10 ns; 
         reset   <= '0';
+        wait for CLK_50MHz_Period + 10 ns; 
         FEC_input_valid      <= '1';
         FEC_input_ready      <= '1';
 
@@ -122,6 +125,7 @@ begin
         --     wait for CLK_50MHz_Period; 
         -- end loop;
         FEC_input_valid      <= '0';
+        FEC_input_ready      <= '0';
         --wait until flag = '1'; 
         --FEC_input_data <= '0';
         wait;
@@ -131,8 +135,6 @@ begin
     process begin 
         wait until FEC_output_valid = '1';
         wait for 2 ns;
-
-        
         report "========================================================================================================";          
         report "---------------------------- Started self checker for: FEC Block --------------------------------";
         report "========================================================================================================";        

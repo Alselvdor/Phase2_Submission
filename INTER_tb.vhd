@@ -64,10 +64,9 @@ begin
         reset   <= '1'; 
         wait for CLK_100MHz_Period + 5 ns; 
         reset   <= '0';
+        wait for CLK_100MHz_Period + 5 ns; 
         INTER_input_valid      <= '1';
         INTER_input_ready      <= '1';
-
-
         report procedure_Break_Notice;
         report procedure_start_SIMULATION_Notice severity note;
 
@@ -119,6 +118,7 @@ begin
         -- end loop;
         INTER_Input_data <= 'X';
         -- wait until flag = '1'; 
+        INTER_input_ready  <= '0';
         INTER_input_valid  <= '0';
         wait;
     end process; 

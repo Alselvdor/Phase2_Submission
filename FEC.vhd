@@ -96,14 +96,14 @@ begin
     clock	    <= clk_50mhz;	 
     address_a   <= std_logic_vector(to_unsigned(counter_buffer_input, address_a'length)) when PingPong_flag = '0' else std_logic_vector(to_unsigned(counter_buffer_input + 96, address_a'length)); 
     address_b   <= std_logic_vector(to_unsigned(counter_shift_and_output, address_b'length));
-    data_a(0)   <= FEC_input_data; 
+    data_a(0)   <= FEC_input_data;
     wren_a      <= FEC_input_valid; 
     FEC_output_valid <= FEC_encoder_out_valid; 
 
-    FEC_output_data  <= (q_b(0) xor shift_reg(0)   xor shift_reg(3)    xor shift_reg(4)    xor shift_reg(5))              when (PingPong_flag = '1' and ((output_state_reg = idle and finished_tail_flag = '1') or output_state_reg = x)) else 
-                        (q_b(0) xor shift_reg(0)   xor shift_reg(1)    xor shift_reg(3)    xor shift_reg(4))              when (PingPong_flag = '1' and output_state_reg = y) else 
-                        (q_b(0) xor shift_reg2(0)  xor shift_reg2(3)   xor shift_reg2(4)   xor shift_reg2(5))             when (PingPong_flag = '0' and ((output_state_reg = idle and finished_tail_flag = '1') or output_state_reg = x)) else
-                        (q_b(0) xor shift_reg2(0)  xor shift_reg2(1)   xor shift_reg2(3)   xor shift_reg2(4))             when (PingPong_flag = '0' and output_state_reg = y) else 
+    FEC_output_data  <= (q_b(0) xor shift_reg(0)   xor shift_reg(3)    xor shift_reg(4)    xor shift_reg(5))              when (PingPong_flag = '1' and ((output_state_reg = idle and finished_tail_flag = '1') or output_state_reg = x) and FEC_output_valid ='1') else 
+                        (q_b(0) xor shift_reg(0)   xor shift_reg(1)    xor shift_reg(3)    xor shift_reg(4))              when (PingPong_flag = '1' and output_state_reg = y and FEC_output_valid ='1') else 
+                        (q_b(0) xor shift_reg2(0)  xor shift_reg2(3)   xor shift_reg2(4)   xor shift_reg2(5))             when (PingPong_flag = '0' and ((output_state_reg = idle and finished_tail_flag = '1') or output_state_reg = x) and FEC_output_valid ='1') else
+                        (q_b(0) xor shift_reg2(0)  xor shift_reg2(1)   xor shift_reg2(3)   xor shift_reg2(4))             when (PingPong_flag = '0' and output_state_reg = y and FEC_output_valid ='1') else 
                  '0'; 
 
     FEC_encoder_out_valid	<= '1' when (input_state_reg = PingPong_state) else '0';	
@@ -228,7 +228,7 @@ begin
                     else 
                         output_state_reg		<= y;					
 					end if;
-					if (counter_shift_and_output < BUFFER_SIZE2 and FEC_encoder_out_valid = '1' and FEC_input_ready = '1') then 		  										
+					if (counter_shift_and_output < BUFFER_SIZE2 and FEC_encoder_out_valid = '1') then 		  										
                         output_state_reg		<= x;
                     else 
                         output_state_reg		<= y;

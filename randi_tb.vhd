@@ -70,6 +70,7 @@ begin
         load <= '1';    --take seed into module 
         wait for CLK_50MHz_Period; --bec of 75 ns edge the next pos edge so make sure a pos edge came 
         load <= '0'; 
+        wait for CLK_50MHz_Period; --bec of 75 ns edge the next pos edge so make sure a pos edge came 
         randi_input_valid <= '1'; 
         randi_input_ready <= '1';
         -- wait until randi_input_ready = '1';
@@ -93,6 +94,7 @@ begin
         report "------------------------------ Finishehd Inputting {2} Input Streams --------------------------" severity note;
         report procedure_Break_Notice;
         randi_input_valid  <= '0';
+        randi_input_ready <= '0';
         wait; --makes process executes once 
     end process;
 

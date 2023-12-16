@@ -144,7 +144,7 @@ begin
                         counter_out             <= counter_out + 1;
                         state_reg               <= PingPong_state;
                         INTER_Output_valid   <= '1';
-                        if (counter < Inter_Buffer-1 and INTER_input_ready = '1') then
+                        if (counter < Inter_Buffer-1) then
                             counter_kmod16          <= counter_kmod16 + 1;
                             counter                 <= counter + 1;
                         end if;
