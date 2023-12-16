@@ -17,8 +17,8 @@ entity TopWiMax is
         TopWiMax_out_valid                        : out   std_logic;
         TopWiMax_out_ready                        : out   std_logic;
 
-        WiOutput1                              	  : out   std_logic_vector(15 downto 0); 
-        WiOutput2                              	  : out   std_logic_vector(15 downto 0) 
+        WiOutput1                              	  : out   std_logic_vector(15 downto 0);  -- Q
+        WiOutput2                              	  : out   std_logic_vector(15 downto 0)   -- I
     );
 end TopWiMax;
 
